@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.songify_app.domain.crud.SongifyCrudFacade;
 import spring.songify_app.domain.crud.dto.AlbumDto;
+import spring.songify_app.domain.crud.dto.AlbumInfo;
 import spring.songify_app.domain.crud.dto.AlbumWithSongsDto;
 import spring.songify_app.infrastructure.crud.album.request.AlbumWithSongsRequestDto;
 import spring.songify_app.infrastructure.crud.album.response.AlbumWithSongsResponseDto;
@@ -51,5 +52,11 @@ class AlbumController {
     public ResponseEntity<AlbumDto> addSongToAlbum(@PathVariable Long albumId, @PathVariable Long songId) {
         AlbumDto updatedAlbum = songifyCrudFacade.addSongToAlbum(albumId, songId);
         return ResponseEntity.ok(updatedAlbum);
+    }
+
+    @GetMapping("/{albumId}")
+    ResponseEntity<AlbumInfo> getAlbumWithArtistsAndSongs(@PathVariable Long albumId) {
+        AlbumInfo albumByIdWithArtistsAndSongs = songifyCrudFacade.findAlbumByIdWithArtistsAndSongs(albumId);
+        return ResponseEntity.ok(albumByIdWithArtistsAndSongs);
     }
 }

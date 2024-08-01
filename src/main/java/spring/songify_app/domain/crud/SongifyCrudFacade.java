@@ -109,4 +109,7 @@ public class SongifyCrudFacade {
         genreAssigner.assignGenreToSong(genreId, songId);
     }
 
+    public AlbumInfo findAlbumByIdWithArtistsAndSongs(Long id){
+        return albumRetriever.findAlbumByIdWithArtistsAndSongs(id);
+    }
 }
