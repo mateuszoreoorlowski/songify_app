@@ -28,6 +28,7 @@ public class SongifyCrudFacade {
     private final ArtistUpdater artistUpdater;
     private final GenreUpdater genreUpdater;
     private final AlbumUpdater albumUpdater;
+    private final SongUpdater songUpdater;
 
     public ArtistDto addArtist(ArtistRequestDto artist) {
         return artistAdder.addArtist(artist.name());
@@ -83,6 +84,10 @@ public class SongifyCrudFacade {
 
     public AlbumDto addSongToAlbum(Long albumId, Long songId){
         return albumAdder.addSongToAlbum(albumId, songId);
+    }
+
+    public SongUpdateDto updateSong(SongUpdateDto dto){
+        return songUpdater.updateSong(dto);
     }
 
 
