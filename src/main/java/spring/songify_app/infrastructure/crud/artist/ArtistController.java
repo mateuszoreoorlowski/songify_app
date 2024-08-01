@@ -1,13 +1,12 @@
 package spring.songify_app.infrastructure.crud.artist;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.songify_app.domain.crud.SongifyCrudFacade;
 import spring.songify_app.domain.crud.dto.ArtistAlbumDto;
 import spring.songify_app.domain.crud.dto.ArtistDto;
+import spring.songify_app.domain.crud.dto.ArtistWithAlbumsDto;
 import spring.songify_app.infrastructure.crud.artist.dto.request.ArtistRequestDto;
 import spring.songify_app.infrastructure.crud.artist.dto.request.ArtistUpdateRequestDto;
 import spring.songify_app.infrastructure.crud.artist.dto.response.AllArtistsResponseDto;
@@ -55,5 +54,11 @@ class ArtistController {
     ResponseEntity<ArtistAlbumDto> addArtistToAlbum(@PathVariable Long albumId, @PathVariable Long artistId) {
         songifyCrudFacade.assignArtistToAlbum(artistId, albumId);
         return ResponseEntity.ok(new ArtistAlbumDto(artistId, albumId));
+    }
+
+    @GetMapping("/{artistId}/albums")
+    ResponseEntity<ArtistWithAlbumsDto> retrieveArtistWithAlbums(@PathVariable Long artistId) {
+        ArtistWithAlbumsDto artistWithAlbumsDto = songifyCrudFacade.retrieveArtistWithAlbums(artistId);
+        return ResponseEntity.ok(artistWithAlbumsDto);
     }
 }
