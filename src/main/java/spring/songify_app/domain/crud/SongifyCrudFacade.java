@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.songify_app.domain.crud.dto.ArtistDto;
 import spring.songify_app.domain.crud.dto.GenreDto;
+import spring.songify_app.domain.crud.dto.SongDto;
+import spring.songify_app.infrastructure.crud.song.request.CreateSongRequestDto;
 import spring.songify_app.infrastructure.crud.artist.dto.request.ArtistRequestDto;
 import spring.songify_app.infrastructure.crud.genre.request.GenreRequestDto;
 
@@ -18,6 +20,7 @@ public class SongifyCrudFacade {
 
     private final ArtistAdder artistAdder;
     private final GenreAdder genreAdder;
+    private final SongAdder songAdder;
     private final ArtistRetriever artistRetriever;
     private final GenreRetriever genreRetriever;
 
@@ -35,6 +38,10 @@ public class SongifyCrudFacade {
 
     public Set<GenreDto> findAllGenres(Pageable pageable) {
         return genreRetriever.findAllGenres(pageable);
+    }
+
+    public SongDto addSong(CreateSongRequestDto songDto) {
+        return songAdder.addSong(songDto);
     }
 
 
