@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import spring.songify_app.domain.crud.SongifyCrudFacade;
 import spring.songify_app.domain.crud.dto.ArtistDto;
 import spring.songify_app.infrastructure.crud.artist.dto.request.ArtistRequestDto;
+import spring.songify_app.infrastructure.crud.artist.dto.request.ArtistUpdateRequestDto;
 import spring.songify_app.infrastructure.crud.artist.dto.response.AllArtistsResponseDto;
 import spring.songify_app.infrastructure.crud.artist.dto.response.ArtistResponseDto;
 
@@ -40,6 +41,12 @@ class ArtistController {
     @PostMapping("/album/song")
     ResponseEntity<ArtistResponseDto> addArtistWithDefaultAlbumAndSong(@RequestBody ArtistRequestDto artistRequestDto) {
         ArtistDto artistDto = songifyCrudFacade.addArtistWithDefaultAlbumAndSong(artistRequestDto);
+        return ResponseEntity.ok(new ArtistResponseDto(artistDto.name()));
+    }
+
+    @PatchMapping("/{artistId}")
+    ResponseEntity<ArtistResponseDto> updateArtistNameById(@RequestBody ArtistUpdateRequestDto dto) {
+        ArtistDto artistDto = songifyCrudFacade.updateArtistNameById(dto.artistId(), dto.newArtistName());
         return ResponseEntity.ok(new ArtistResponseDto(artistDto.name()));
     }
 }

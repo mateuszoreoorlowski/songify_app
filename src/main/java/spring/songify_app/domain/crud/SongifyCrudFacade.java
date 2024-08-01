@@ -25,6 +25,7 @@ public class SongifyCrudFacade {
     private final GenreRetriever genreRetriever;
     private final SongRetriever songRetriever;
     private final AlbumRetriever albumRetriever;
+    private final ArtistUpdater artistUpdater;
 
     public ArtistDto addArtist(ArtistRequestDto artist) {
         return artistAdder.addArtist(artist.name());
@@ -60,6 +61,10 @@ public class SongifyCrudFacade {
 
     public ArtistDto addArtistWithDefaultAlbumAndSong(ArtistRequestDto dto){
         return artistAdder.addArtistWithDefaultAlbumAndSong(dto);
+    }
+
+    public ArtistDto updateArtistNameById(Long artistId, String name){
+        return artistUpdater.updateArtistNameById(artistId, name);
     }
 
 
