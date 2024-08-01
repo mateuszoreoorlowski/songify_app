@@ -1,8 +1,6 @@
 package spring.songify_app.infrastructure.crud.genre;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.songify_app.domain.crud.SongifyCrudFacade;
@@ -37,6 +35,12 @@ class GenreController {
                                 genreDto.name()))
                         .collect(Collectors.toSet()));
         return ResponseEntity.ok(genres);
+    }
+
+    @PatchMapping
+    ResponseEntity<GenreResponseDto> updateGenreNameById(@RequestBody GenreRequestDto genreRequestDto) {
+        GenreDto genreDto = songifyCrudFacade.updateGenreNameById(genreRequestDto.id(), genreRequestDto.name());
+        return ResponseEntity.ok(new GenreResponseDto(genreDto.id(), genreDto.name()));
     }
 
 }
