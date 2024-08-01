@@ -5,11 +5,12 @@ import org.apache.coyote.Response;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import spring.songify_app.domain.crud.SongifyCrudFacade;
 import spring.songify_app.domain.crud.dto.AlbumDto;
+import spring.songify_app.domain.crud.dto.AlbumWithSongsDto;
+import spring.songify_app.infrastructure.crud.album.request.AlbumWithSongsRequestDto;
+import spring.songify_app.infrastructure.crud.album.response.AlbumWithSongsResponseDto;
 import spring.songify_app.infrastructure.crud.album.response.AllAlbumsResponseDto;
 
 import java.util.Set;
@@ -26,5 +27,11 @@ class AlbumController {
         Set<AlbumDto> allAlbums = songifyCrudFacade.findAllAlbums(pageable);
         AllAlbumsResponseDto response = new AllAlbumsResponseDto(allAlbums);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    ResponseEntity<AlbumWithSongsResponseDto> addAlbumWithSongs(@RequestBody AlbumWithSongsRequestDto albumRequestDto) {
+        AlbumWithSongsDto albumDto = songifyCrudFacade.addAlbumWithSong(albumRequestDto);
+        return ResponseEntity.ok(new AlbumWithSongsResponseDto(albumDto.title(), albumDto.releaseDate(), albumDto.songsIds()));
     }
 }
