@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import spring.songify_app.domain.crud.dto.AlbumDto;
 import spring.songify_app.domain.crud.dto.ArtistDto;
 import spring.songify_app.domain.crud.dto.GenreDto;
 import spring.songify_app.domain.crud.dto.SongDto;
@@ -24,6 +25,7 @@ public class SongifyCrudFacade {
     private final ArtistRetriever artistRetriever;
     private final GenreRetriever genreRetriever;
     private final SongRetriever songRetriever;
+    private final AlbumRetriever albumRetriever;
 
     public ArtistDto addArtist(ArtistRequestDto artist) {
         return artistAdder.addArtist(artist.name());
@@ -47,6 +49,10 @@ public class SongifyCrudFacade {
 
     public Set<SongDto> findAllSongs(Pageable pageable) {
         return songRetriever.findAll(pageable);
+    }
+
+    public Set<AlbumDto> findAllAlbums(Pageable pageable) {
+        return albumRetriever.findAllAlbums(pageable);
     }
 
 
