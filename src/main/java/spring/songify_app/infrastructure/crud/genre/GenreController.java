@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.songify_app.domain.crud.SongifyCrudFacade;
 import spring.songify_app.domain.crud.dto.GenreDto;
+import spring.songify_app.domain.crud.dto.GenreWithSongsDto;
 import spring.songify_app.infrastructure.crud.genre.request.GenreRequestDto;
 import spring.songify_app.infrastructure.crud.genre.response.AllGenresResponseDto;
 import spring.songify_app.infrastructure.crud.genre.response.GenreResponseDto;
@@ -41,6 +42,12 @@ class GenreController {
     ResponseEntity<GenreResponseDto> updateGenreNameById(@RequestBody GenreRequestDto genreRequestDto) {
         GenreDto genreDto = songifyCrudFacade.updateGenreNameById(genreRequestDto.id(), genreRequestDto.name());
         return ResponseEntity.ok(new GenreResponseDto(genreDto.id(), genreDto.name()));
+    }
+
+    @GetMapping("/{genreId}/songs")
+    ResponseEntity<GenreWithSongsDto> getGenreWithSongs(@PathVariable Long genreId) {
+        GenreWithSongsDto genreWithSongsDto = songifyCrudFacade.retrieveGenreWithSongs(genreId);
+        return ResponseEntity.ok(genreWithSongsDto);
     }
 
 }
