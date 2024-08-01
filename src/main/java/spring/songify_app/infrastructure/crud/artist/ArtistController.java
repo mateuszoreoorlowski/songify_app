@@ -6,6 +6,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.songify_app.domain.crud.SongifyCrudFacade;
+import spring.songify_app.domain.crud.dto.ArtistAlbumDto;
 import spring.songify_app.domain.crud.dto.ArtistDto;
 import spring.songify_app.infrastructure.crud.artist.dto.request.ArtistRequestDto;
 import spring.songify_app.infrastructure.crud.artist.dto.request.ArtistUpdateRequestDto;
@@ -48,5 +49,11 @@ class ArtistController {
     ResponseEntity<ArtistResponseDto> updateArtistNameById(@RequestBody ArtistUpdateRequestDto dto) {
         ArtistDto artistDto = songifyCrudFacade.updateArtistNameById(dto.artistId(), dto.newArtistName());
         return ResponseEntity.ok(new ArtistResponseDto(artistDto.name()));
+    }
+
+    @PutMapping("/{artistId}/albums/{albumId}")
+    ResponseEntity<ArtistAlbumDto> addArtistToAlbum(@PathVariable Long albumId, @PathVariable Long artistId) {
+        songifyCrudFacade.assignArtistToAlbum(artistId, albumId);
+        return ResponseEntity.ok(new ArtistAlbumDto(artistId, albumId));
     }
 }

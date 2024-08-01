@@ -30,6 +30,7 @@ public class SongifyCrudFacade {
     private final AlbumUpdater albumUpdater;
     private final SongUpdater songUpdater;
     private final SongAssigner songAssigner;
+    private final ArtistAssigner artistAssigner;
 
     public ArtistDto addArtist(ArtistRequestDto artist) {
         return artistAdder.addArtist(artist.name());
@@ -97,6 +98,10 @@ public class SongifyCrudFacade {
 
     public SongArtistDto assignSongToArtist(SongArtistDto dto){
         return songAssigner.assignSongToArtist(dto);
+    }
+
+    public ArtistAlbumDto assignArtistToAlbum(Long artistId, Long albumId){
+        return artistAssigner.assignArtistToAlbum(artistId, albumId);
     }
 
 }
