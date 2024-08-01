@@ -71,4 +71,10 @@ class SongController {
         songifyCrudFacade.assignGenreToSong(genreId, songId);
         return ResponseEntity.ok(new AssignGenreToSongDto(songId, genreId));
     }
+
+    @DeleteMapping("/{songId}/album/{albumId}")
+    public ResponseEntity<String> deleteSong(@PathVariable Long songId, @PathVariable Long albumId) {
+        songifyCrudFacade.deleteSongFromAlbumById(songId, albumId);
+        return ResponseEntity.ok("probably song deleted :)");
+    }
 }

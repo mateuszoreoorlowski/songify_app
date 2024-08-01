@@ -25,4 +25,8 @@ interface SongRepository extends Repository<Song, Long> {
     boolean existsByGenreId(Long genreId);
 
     boolean existsByAlbumId(Long albumId);
+
+    @Modifying
+    @Query("DELETE FROM Song s WHERE s.id = :id")
+    void deleteById(Long id);
 }
