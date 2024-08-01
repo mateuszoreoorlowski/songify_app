@@ -7,6 +7,7 @@ import spring.songify_app.domain.crud.dto.SongDto;
 import spring.songify_app.domain.crud.dto.SongLanguageDto;
 import spring.songify_app.domain.crud.exceptions.SongNotFoundException;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,15 +17,17 @@ class SongRetriever {
 
     private final SongRepository songRepository;
 
-    Set<SongDto> findAll(Pageable pageable) {
-        return songRepository.findAll(pageable)
+    Set<SongDto> findAll() {
+        return songRepository.findAll()
                 .stream()
                 .map(song -> SongDto.builder()
                         .id(song.getId())
                         .name(song.getName())
                         .duration(song.getDuration())
                         .releaseDate(song.getReleaseDate())
-                        .language(SongLanguageDto.valueOf(song.getLanguage().name()))
+                        .language(Optional.ofNullable(song.getLanguage())
+                                .map(language -> SongLanguageDto.valueOf(language.name()))
+                                .orElse(null))
                         .build())
                 .collect(Collectors.toSet());
     }

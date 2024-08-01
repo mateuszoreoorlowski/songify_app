@@ -9,5 +9,5 @@ interface ArtistRepository extends Repository<Artist, Long> {
 
     Artist save(Artist artist);
 
-    Set<Artist> findAll(Pageable pageable);
+    Set<Artist> findAll();
 }

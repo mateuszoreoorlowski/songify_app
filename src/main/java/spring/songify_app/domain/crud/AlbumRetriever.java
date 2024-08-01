@@ -16,8 +16,8 @@ class AlbumRetriever {
 
     private final AlbumRepository albumRepository;
 
-    Set<AlbumDto> findAllAlbums(Pageable pageable) {
-        return albumRepository.findAll(pageable).stream()
+    Set<AlbumDto> findAllAlbums() {
+        return albumRepository.findAll().stream()
                 .map(album ->
                         new AlbumDto(album.getId(),
                         album.getTitle()))

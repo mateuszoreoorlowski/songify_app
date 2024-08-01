@@ -35,4 +35,8 @@ class Artist extends BaseEntity {
         this.name = name;
     }
 
+    void addAlbum(final Album album) {
+        albums.add(album);
+        album.addArtist(this);
+    }
 }

@@ -10,6 +10,6 @@ interface AlbumRepository extends Repository<Album, Long> {
 
    Album save(Album album);
 
-   Set<Album> findAll(Pageable pageable);
+   Set<Album> findAll();
 
 }

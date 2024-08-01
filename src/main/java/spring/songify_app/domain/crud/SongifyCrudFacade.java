@@ -30,32 +30,36 @@ public class SongifyCrudFacade {
         return artistAdder.addArtist(artist.name());
     }
 
-    public Set<ArtistDto> findAllArtists(Pageable pageable) {
-        return artistRetriever.findAllArtists(pageable);
+    public Set<ArtistDto> findAllArtists() {
+        return artistRetriever.findAllArtists();
     }
 
     public GenreDto addGenre(GenreRequestDto dto) {
         return genreAdder.addGenre(dto.name());
     }
 
-    public Set<GenreDto> findAllGenres(Pageable pageable) {
-        return genreRetriever.findAllGenres(pageable);
+    public Set<GenreDto> findAllGenres() {
+        return genreRetriever.findAllGenres();
     }
 
     public SongDto addSong(CreateSongRequestDto songDto) {
         return songAdder.addSong(songDto);
     }
 
-    public Set<SongDto> findAllSongs(Pageable pageable) {
-        return songRetriever.findAll(pageable);
+    public Set<SongDto> findAllSongs() {
+        return songRetriever.findAll();
     }
 
     public AlbumWithSongsDto addAlbumWithSong(AlbumWithSongsRequestDto albumWithSongsRequestDto) {
         return albumAdder.addAlbumWithSongs(albumWithSongsRequestDto.title(), albumWithSongsRequestDto.releaseDate(), albumWithSongsRequestDto.songsIds());
     }
 
-    public Set<AlbumDto> findAllAlbums(Pageable pageable) {
-        return albumRetriever.findAllAlbums(pageable);
+    public Set<AlbumDto> findAllAlbums() {
+        return albumRetriever.findAllAlbums();
+    }
+
+    public ArtistDto addArtistWithDefaultAlbumAndSong(ArtistRequestDto dto){
+        return artistAdder.addArtistWithDefaultAlbumAndSong(dto);
     }
 
 

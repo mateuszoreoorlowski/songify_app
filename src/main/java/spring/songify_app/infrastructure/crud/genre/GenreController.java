@@ -28,8 +28,8 @@ class GenreController {
     }
 
     @GetMapping
-    ResponseEntity<AllGenresResponseDto> getAllGenres(@PageableDefault(page = 0, size = 10) Pageable pageable) {
-        Set<GenreDto> genreDtos = songifyCrudFacade.findAllGenres(pageable);
+    ResponseEntity<AllGenresResponseDto> getAllGenres() {
+        Set<GenreDto> genreDtos = songifyCrudFacade.findAllGenres();
         AllGenresResponseDto genres = new AllGenresResponseDto(
                 genreDtos.stream()
                         .map(genreDto -> new GenreResponseDto(

@@ -10,7 +10,7 @@ interface GenreRepository extends Repository<Genre, Long> {
 
     Genre save(Genre genre);
 
-    Set<Genre> findAll(Pageable pageable);
+    Set<Genre> findAll();
 
     boolean existsById(Long id);
 }

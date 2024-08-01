@@ -28,12 +28,18 @@ class ArtistController {
     }
 
     @GetMapping
-    ResponseEntity<AllArtistsResponseDto> getAllArtists(@PageableDefault(page = 0, size = 10) Pageable pageable) {
-        Set<ArtistDto> artistDtos = songifyCrudFacade.findAllArtists(pageable);
+    ResponseEntity<AllArtistsResponseDto> getAllArtists() {
+        Set<ArtistDto> artistDtos = songifyCrudFacade.findAllArtists();
         AllArtistsResponseDto artists = new AllArtistsResponseDto(
                 artistDtos.stream()
                         .map(artistDto -> new ArtistResponseDto(artistDto.name()))
                         .collect(Collectors.toSet()));
         return ResponseEntity.ok(artists);
+    }
+
+    @PostMapping("/album/song")
+    ResponseEntity<ArtistResponseDto> addArtistWithDefaultAlbumAndSong(@RequestBody ArtistRequestDto artistRequestDto) {
+        ArtistDto artistDto = songifyCrudFacade.addArtistWithDefaultAlbumAndSong(artistRequestDto);
+        return ResponseEntity.ok(new ArtistResponseDto(artistDto.name()));
     }
 }

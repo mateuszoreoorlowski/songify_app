@@ -14,8 +14,8 @@ class GenreRetriever {
 
     private final GenreRepository genreRepository;
 
-    Set<GenreDto> findAllGenres(Pageable pageable) {
-        return genreRepository.findAll(pageable)
+    Set<GenreDto> findAllGenres() {
+        return genreRepository.findAll()
                 .stream()
                 .map(genre -> new GenreDto(
                         genre.getId(),

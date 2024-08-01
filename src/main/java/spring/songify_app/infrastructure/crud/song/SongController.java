@@ -29,8 +29,8 @@ class SongController {
     }
 
     @GetMapping
-    ResponseEntity<AllSongsResponseDto> getAllSongs(@PageableDefault(page = 0, size = 10) Pageable pageable) {
-        Set<SongDto> allSongs = songifyCrudFacade.findAllSongs(pageable);
+    ResponseEntity<AllSongsResponseDto> getAllSongs() {
+        Set<SongDto> allSongs = songifyCrudFacade.findAllSongs();
         AllSongsResponseDto response = new AllSongsResponseDto(allSongs);
         return ResponseEntity.ok(response);
     }

@@ -14,8 +14,8 @@ class ArtistRetriever {
 
     private final ArtistRepository artistRepository;
 
-    Set<ArtistDto> findAllArtists(Pageable pageable) {
-        return artistRepository.findAll(pageable)
+    Set<ArtistDto> findAllArtists() {
+        return artistRepository.findAll()
                 .stream()
                 .map(artist -> new ArtistDto(
                         artist.getId(),

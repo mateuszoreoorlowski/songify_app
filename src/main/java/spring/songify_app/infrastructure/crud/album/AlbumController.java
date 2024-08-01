@@ -23,8 +23,8 @@ class AlbumController {
     private final SongifyCrudFacade songifyCrudFacade;
 
     @GetMapping
-    ResponseEntity<AllAlbumsResponseDto> getAllAlbums(@PageableDefault(page = 0, size = 10) Pageable pageable) {
-        Set<AlbumDto> allAlbums = songifyCrudFacade.findAllAlbums(pageable);
+    ResponseEntity<AllAlbumsResponseDto> getAllAlbums() {
+        Set<AlbumDto> allAlbums = songifyCrudFacade.findAllAlbums();
         AllAlbumsResponseDto response = new AllAlbumsResponseDto(allAlbums);
         return ResponseEntity.ok(response);
     }
