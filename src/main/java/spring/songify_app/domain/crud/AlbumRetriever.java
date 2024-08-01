@@ -23,4 +23,9 @@ class AlbumRetriever {
                         album.getTitle()))
                 .collect(Collectors.toSet());
     }
+
+    public Album findById(Long albumId) {
+        return albumRepository.findById(albumId)
+                .orElseThrow(() -> new IllegalArgumentException("Album not found"));
+    }
 }

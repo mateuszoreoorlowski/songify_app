@@ -34,4 +34,22 @@ class AlbumController {
         AlbumWithSongsDto albumDto = songifyCrudFacade.addAlbumWithSong(albumRequestDto);
         return ResponseEntity.ok(new AlbumWithSongsResponseDto(albumDto.title(), albumDto.releaseDate(), albumDto.songsIds()));
     }
+
+    @PutMapping("/{id}/name")
+    public ResponseEntity<AlbumDto> updateAlbumTitle(@PathVariable Long id, @PathVariable String newName) {
+        AlbumDto updatedAlbum = songifyCrudFacade.updateAlbumTitle(id, newName);
+        return ResponseEntity.ok(updatedAlbum);
+    }
+
+    @PutMapping("/{albumId}/artists/{artistId}")
+    public ResponseEntity<AlbumDto> addArtistToAlbum(@PathVariable Long albumId, @PathVariable Long artistId) {
+        AlbumDto updatedAlbum = songifyCrudFacade.addNewArtistToAlbum(albumId, artistId);
+        return ResponseEntity.ok(updatedAlbum);
+    }
+
+    @PutMapping("/{albumId}/songs/{songId}")
+    public ResponseEntity<AlbumDto> addSongToAlbum(@PathVariable Long albumId, @PathVariable Long songId) {
+        AlbumDto updatedAlbum = songifyCrudFacade.addSongToAlbum(albumId, songId);
+        return ResponseEntity.ok(updatedAlbum);
+    }
 }
