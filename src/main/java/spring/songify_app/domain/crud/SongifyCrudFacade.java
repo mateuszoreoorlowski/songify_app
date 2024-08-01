@@ -95,4 +95,8 @@ public class SongifyCrudFacade {
         return songAssigner.assignSongToAlbum(songId, albumId);
     }
 
+    public SongArtistDto assignSongToArtist(SongArtistDto dto){
+        return songAssigner.assignSongToArtist(dto);
+    }
+
 }

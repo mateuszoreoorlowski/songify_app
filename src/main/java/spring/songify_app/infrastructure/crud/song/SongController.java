@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.songify_app.domain.crud.SongifyCrudFacade;
 import spring.songify_app.domain.crud.dto.SongAlbumDto;
+import spring.songify_app.domain.crud.dto.SongArtistDto;
 import spring.songify_app.domain.crud.dto.SongDto;
 import spring.songify_app.domain.crud.dto.SongUpdateDto;
 import spring.songify_app.infrastructure.crud.song.request.CreateSongRequestDto;
@@ -54,5 +55,11 @@ class SongController {
     public ResponseEntity<SongAlbumDto> assignSongToAlbum(@PathVariable Long songId, @PathVariable Long albumId) {
         SongAlbumDto songAlbumDto = songifyCrudFacade.assignSongToAlbum(songId, albumId);
         return ResponseEntity.ok(songAlbumDto);
+    }
+
+    @PutMapping("/{albumId}/song/{songId}/artist/{artistId}")
+    public ResponseEntity<SongArtistDto> assignSongToArtist(@PathVariable Long songId, @PathVariable Long albumId, @PathVariable Long artistId) {
+        SongArtistDto songArtistDto = songifyCrudFacade.assignSongToArtist(new SongArtistDto(songId, albumId, artistId));
+        return ResponseEntity.ok(songArtistDto);
     }
 }
