@@ -21,4 +21,6 @@ interface SongRepository extends Repository<Song, Long> {
     @Modifying
     @Query("delete from Song s where s.id in :ids")
     int deleteByIdIn(Collection<Long> ids);
+
+    boolean existsByGenreId(Long genreId);
 }

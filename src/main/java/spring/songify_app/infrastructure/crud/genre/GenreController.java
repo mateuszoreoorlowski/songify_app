@@ -50,4 +50,10 @@ class GenreController {
         return ResponseEntity.ok(genreWithSongsDto);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteGenre(@PathVariable Long id) {
+        songifyCrudFacade.deleteGenre(id);
+        return ResponseEntity.ok("probably genre deleted :)");
+    }
+
 }
