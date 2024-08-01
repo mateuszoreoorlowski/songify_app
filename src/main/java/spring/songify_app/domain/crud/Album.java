@@ -45,4 +45,9 @@ class Album extends BaseEntity {
     void addArtist(final Artist artist) {
         artists.add(artist);
     }
+
+    void removeArtist(Artist artist) {
+        artists.remove(artist);
+        artist.removeAlbum(this);
+    }
 }

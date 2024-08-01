@@ -61,4 +61,10 @@ class ArtistController {
         ArtistWithAlbumsDto artistWithAlbumsDto = songifyCrudFacade.retrieveArtistWithAlbums(artistId);
         return ResponseEntity.ok(artistWithAlbumsDto);
     }
+
+    @DeleteMapping("/{artistId}")
+    ResponseEntity<String> deleteArtistWithAllAlbumsAndSongs(@PathVariable Long artistId) {
+        songifyCrudFacade.deleteArtistByIdWithAlbumsAndSongs(artistId);
+        return ResponseEntity.ok("probably artist deleted :)");
+    }
 }

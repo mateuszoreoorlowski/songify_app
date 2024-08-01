@@ -5,10 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 interface SongRepository extends Repository<Song, Long> {
 
@@ -20,4 +17,8 @@ interface SongRepository extends Repository<Song, Long> {
     Optional<Song> findById(Long id);
 
     List<Song> findByGenreName(String genreName);
+
+    @Modifying
+    @Query("delete from Song s where s.id in :ids")
+    int deleteByIdIn(Collection<Long> ids);
 }

@@ -32,6 +32,7 @@ public class SongifyCrudFacade {
     private final SongAssigner songAssigner;
     private final ArtistAssigner artistAssigner;
     private final GenreAssigner genreAssigner;
+    private final ArtistDeleter artistDeleter;
 
     public ArtistDto addArtist(ArtistRequestDto artist) {
         return artistAdder.addArtist(artist.name());
@@ -119,5 +120,9 @@ public class SongifyCrudFacade {
 
     public ArtistWithAlbumsDto retrieveArtistWithAlbums(Long artistId) {
         return artistRetriever.retrieveArtistWithAlbums(artistId);
+    }
+
+    public void deleteArtistByIdWithAlbumsAndSongs(Long artistId){
+        artistDeleter.deleteArtistByIdWithAlbumsAndSongs(artistId);
     }
 }
