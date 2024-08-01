@@ -5,7 +5,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.songify_app.domain.crud.dto.ArtistDto;
+import spring.songify_app.domain.crud.dto.GenreDto;
 import spring.songify_app.infrastructure.crud.artist.dto.request.ArtistRequestDto;
+import spring.songify_app.infrastructure.crud.genre.request.GenreRequestDto;
 
 import java.util.Set;
 
@@ -15,6 +17,7 @@ import java.util.Set;
 public class SongifyCrudFacade {
 
     private final ArtistAdder artistAdder;
+    private final GenreAdder genreAdder;
     private final ArtistRetriever artistRetriever;
 
     public ArtistDto addArtist(ArtistRequestDto artist) {
@@ -23,6 +26,10 @@ public class SongifyCrudFacade {
 
     public Set<ArtistDto> findAllArtists(Pageable pageable) {
         return artistRetriever.findAllArtists(pageable);
+    }
+
+    public GenreDto addGenre(GenreRequestDto dto) {
+        return genreAdder.addGenre(dto.name());
     }
 
 
