@@ -7,6 +7,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.songify_app.domain.crud.SongifyCrudFacade;
+import spring.songify_app.domain.crud.dto.SongAlbumDto;
 import spring.songify_app.domain.crud.dto.SongDto;
 import spring.songify_app.domain.crud.dto.SongUpdateDto;
 import spring.songify_app.infrastructure.crud.song.request.CreateSongRequestDto;
@@ -47,5 +48,11 @@ class SongController {
                         songDto.language(),
                         songDto.artistId()));
         return ResponseEntity.ok(updatedSong);
+    }
+
+    @PutMapping("/{songId}/album/{albumId}")
+    public ResponseEntity<SongAlbumDto> assignSongToAlbum(@PathVariable Long songId, @PathVariable Long albumId) {
+        SongAlbumDto songAlbumDto = songifyCrudFacade.assignSongToAlbum(songId, albumId);
+        return ResponseEntity.ok(songAlbumDto);
     }
 }
