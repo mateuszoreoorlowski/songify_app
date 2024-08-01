@@ -9,9 +9,18 @@ import java.util.Set;
 @Service
 class AlbumDeleter {
 
+    private final SongRepository songRepository;
     private final AlbumRepository albumRepository;
 
     void deleteAllAlbumsByIds(final Set<Long> albumIdsToDelete) {
         albumRepository.deleteByIdIn(albumIdsToDelete);
+    }
+
+    void deleteAlbumById(Long albumId) {
+        // Sprawdź, czy istnieją piosenki powiązane z tym albumem
+        if (songRepository.existsByAlbumId(albumId)) {
+            throw new IllegalArgumentException("Nie można usunąć albumu, istnieją piosenki powiązane z nim.");
+        }
+        albumRepository.deleteById(albumId);
     }
 }

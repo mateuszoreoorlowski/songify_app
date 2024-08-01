@@ -23,4 +23,6 @@ interface SongRepository extends Repository<Song, Long> {
     int deleteByIdIn(Collection<Long> ids);
 
     boolean existsByGenreId(Long genreId);
+
+    boolean existsByAlbumId(Long albumId);
 }

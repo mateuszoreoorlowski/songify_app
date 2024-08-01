@@ -59,4 +59,10 @@ class AlbumController {
         AlbumInfo albumByIdWithArtistsAndSongs = songifyCrudFacade.findAlbumByIdWithArtistsAndSongs(albumId);
         return ResponseEntity.ok(albumByIdWithArtistsAndSongs);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAlbum(@PathVariable Long id) {
+        songifyCrudFacade.deleteAlbumById(id);
+        return ResponseEntity.ok("probably album deleted :)");
+    }
 }

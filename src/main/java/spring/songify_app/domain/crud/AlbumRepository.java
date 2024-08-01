@@ -12,34 +12,38 @@ import java.util.*;
 
 interface AlbumRepository extends Repository<Album, Long> {
 
-   Album save(Album album);
+    Album save(Album album);
 
-   Set<Album> findAll();
+    Set<Album> findAll();
 
-   Optional<Album> findById(Long albumId);
+    Optional<Album> findById(Long albumId);
 
-   @Query("""
+    @Query("""
             select a from Album a
             join fetch a.songs songs
             join fetch a.artists artists
             where a.id = :id""")
-   Optional<AlbumInfo> findAlbumByIdWithSongsAndArtists(Long id);
+    Optional<AlbumInfo> findAlbumByIdWithSongsAndArtists(Long id);
 
-   @Query("""
+    @Query("""
             select a from Album a 
             inner join a.artists artists 
             where artists = :artist
             """)
-   List<Album> findByArtist(@Param("artist") Artist artist);
+    List<Album> findByArtist(@Param("artist") Artist artist);
 
-   @Query("""
+    @Query("""
             select a from Album a 
             inner join a.artists artists 
             where artists.id = :id
             """)
-   Set<Album> findAllAlbumsByArtistId(@Param("id") Long id);
+    Set<Album> findAllAlbumsByArtistId(@Param("id") Long id);
 
-   @Modifying
-   @Query("delete from Album a where a.id in :ids")
-   int deleteByIdIn(Collection<Long> ids);
+    @Modifying
+    @Query("delete from Album a where a.id in :ids")
+    int deleteByIdIn(Collection<Long> ids);
+
+    @Modifying
+    @Query("delete from Album a where a.id = :albumId")
+    int deleteById(Long albumId);
 }
