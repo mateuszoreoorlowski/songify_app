@@ -66,4 +66,24 @@ class InMemoryAlbumRepository implements AlbumRepository {
         db.remove(albumId);
         return albumId.intValue();
     }
+
+    @Override
+    public Set<Song> findSongsByAlbumId(Long albumId) {
+        Album album = db.get(albumId);
+        if (album != null) {
+            return album.getSongs();
+        } else {
+            return Collections.emptySet();
+        }
+    }
+
+    @Override
+    public Set<Artist> findArtistsByAlbumId(Long albumId) {
+        Album album = db.get(albumId);
+        if (album != null) {
+            return album.getArtists();
+        } else {
+            return Collections.emptySet();
+        }
+    }
 }

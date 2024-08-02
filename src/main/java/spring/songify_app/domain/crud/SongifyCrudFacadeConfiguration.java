@@ -29,7 +29,7 @@ class SongifyCrudFacadeConfiguration {
             // Initialize deleters
             SongDeleter songDeleter = new SongDeleter(songRepository, albumRepository);
             AlbumDeleter albumDeleter = new AlbumDeleter(songRepository, albumRepository);
-            ArtistDeleter artistDeleter = new ArtistDeleter(artistRepository, artistRetriever, albumRetriever, albumDeleter, songDeleter);
+            ArtistDeleter artistDeleter = new ArtistDeleter(artistRepository, albumRepository, artistRetriever, albumRetriever, albumDeleter, songDeleter);
             GenreDeleter genreDeleter = new GenreDeleter(genreRepository, songRepository);
 
             // Initialize updaters

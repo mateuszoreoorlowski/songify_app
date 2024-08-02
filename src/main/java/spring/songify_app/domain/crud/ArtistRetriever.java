@@ -47,4 +47,9 @@ class ArtistRetriever {
 
         return new ArtistWithAlbumsDto(artist.getId(), artist.getName(), albums);
     }
+
+    public Artist findArtistById(Long artistId) {
+        return artistRepository.findById(artistId)
+                .orElseThrow(() -> new ArtistNotFoundException(artistId.toString()));
+    }
 }

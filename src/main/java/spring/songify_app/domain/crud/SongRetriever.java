@@ -37,4 +37,12 @@ class SongRetriever {
                 .orElseThrow(() -> new SongNotFoundException("Song with id " + id + " not found"));
     }
 
+    SongDto findSongDtoById(Long id) {
+        return songRepository.findById(id)
+                .map(song -> SongDto.builder()
+                        .id(song.getId())
+                        .name(song.getName())
+                        .build())
+                .orElseThrow(() -> new SongNotFoundException("Song with id: " + id + " not found"));
+    }
 }

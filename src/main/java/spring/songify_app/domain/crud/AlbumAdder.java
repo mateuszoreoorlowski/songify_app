@@ -7,6 +7,7 @@ import spring.songify_app.domain.crud.dto.AlbumDto;
 import spring.songify_app.domain.crud.dto.AlbumWithSongsDto;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,10 @@ class AlbumAdder {
     private final ArtistRetriever artistRetriever;
 
     AlbumWithSongsDto addAlbumWithSongs(String title, Instant releaseDate , Set<Long> ids) {
+        if(ids == null || ids.isEmpty()){
+            ids = new HashSet<>();
+        }
+
         Set<Song> songs = ids.stream()
                 .map(songRetriever::findSongById)
                 .collect(Collectors.toSet());

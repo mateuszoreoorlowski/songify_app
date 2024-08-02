@@ -18,4 +18,10 @@ class ArtistAssigner {
 
         return new ArtistAlbumDto(artist.getId(), album.getId());
     }
+
+    void addArtistToAlbum(final Long artistId, final Long albumId) {
+        Artist artist = artistRetriever.findById(artistId);
+        Album album = albumRetriever.findById(albumId);
+        artist.addAlbum(album);
+    }
 }

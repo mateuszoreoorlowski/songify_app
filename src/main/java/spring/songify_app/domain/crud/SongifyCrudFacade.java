@@ -10,6 +10,7 @@ import spring.songify_app.infrastructure.crud.song.request.CreateSongRequestDto;
 import spring.songify_app.infrastructure.crud.artist.dto.request.ArtistRequestDto;
 import spring.songify_app.infrastructure.crud.genre.request.GenreRequestDto;
 
+import java.util.Collection;
 import java.util.Set;
 
 @Service
@@ -139,5 +140,43 @@ public class SongifyCrudFacade {
 
     public void deleteSongFromAlbumById(Long songId, Long albumId) {
         songDeleter.deleteSongFromAlbumById(songId, albumId);
+    }
+
+    //  --- DODATKOWE POMOCZNICZE METODY ---
+
+    public void addArtistToAlbum(Long artistId, Long albumId) {
+        artistAssigner.addArtistToAlbum(artistId, albumId);
+    }
+
+    public Set<AlbumDto> findAlbumsByArtistId(Long artistId) {
+        return albumRetriever.findAlbumsDtoByArtistId(artistId);
+    }
+
+    long countArtistsByAlbumId(Long id) {
+        return albumRetriever.countArtistsByAlbumId(id);
+    }
+
+    public SongDto findSongDtoById(Long id) {
+        return songRetriever.findSongDtoById(id);
+    }
+
+    public AlbumDto findAlbumDtoById(final Long albumId) {
+        return albumRetriever.findAlbumDtoById(albumId);
+    }
+
+    public Set<Song> findSongsByAlbumId(final Long albumId) {
+        return albumRetriever.findSongsByAlbumId(albumId);
+    }
+
+    public Album findAlbumById(final Long albumId) {
+        return albumRetriever.findById(albumId);
+    }
+
+    public Set<Artist> findArtistsByAlbumId(final Long albumId) {
+        return albumRetriever.findArtistsByAlbumId(albumId);
+    }
+
+    public Artist findArtistById(Long artistId) {
+        return artistRetriever.findArtistById(artistId);
     }
 }
