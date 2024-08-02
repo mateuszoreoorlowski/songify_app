@@ -33,7 +33,7 @@ class AlbumAdder {
         Album savedAlbum = albumRepository.save(album);
         Set<Long> songsIds = savedAlbum.getSongs().stream().map(Song::getId).collect(Collectors.toSet());
 
-        return new AlbumWithSongsDto(savedAlbum.getTitle(), savedAlbum.getReleaseDate(), songsIds);
+        return new AlbumWithSongsDto(savedAlbum.getId() ,savedAlbum.getTitle(), savedAlbum.getReleaseDate(), songsIds);
     }
 
     public AlbumDto addArtistToAlbum(Long albumId, Long artistId){
