@@ -407,4 +407,183 @@ class SongifyCrudFacadeTest {
         assertThat(result.name()).isEqualTo("Kękę");
     }
 
+    // Wymaganie 11 - można edytować nazwę gatunku muzycznego
+    @Test
+    @DisplayName("Should update genre 'Rap' name to 'Hip-Hop' by id")
+    public void should_update_genre_rap_name_to_hip_hop_by_id() {
+        // given
+        GenreRequestDto genre = GenreRequestDto.builder()
+                .name("Rap")
+                .build();
+        Long genreId = songifyCrudFacade.addGenre(genre).id();
+
+        assertThat(songifyCrudFacade.findGenreById(genreId).getName()).isEqualTo("Rap");
+
+        // when
+        GenreDto result = songifyCrudFacade.updateGenreNameById(genreId, "Hip-Hop");
+
+        // then
+        assertThat(result.name()).isEqualTo("Hip-Hop");
+    }
+
+    // Wymaganie 12 - można edytować album (dodawać piosenki, arytstów, zmieniac nazwe albumu)
+    // Przykład 1 - Kiedy dodajemy piosenkę do albumu
+    @Test
+    @DisplayName("Should add song 'Wujek Dobra Rada' to album 'Pocztówka z WWA, lato 2K19' by id")
+    public void should_add_song_wujek_dobra_rada_to_album_pocztowka_z_wwa_lato_2k19_by_id() {
+        // given
+        CreateSongRequestDto song = CreateSongRequestDto.builder()
+                .name("Wujek Dobra Rada")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId = songifyCrudFacade.addSong(song).id();
+
+        AlbumWithSongsRequestDto album = AlbumWithSongsRequestDto.builder()
+                .title("Pocztówka z WWA, lato 2K19")
+                .build();
+        Long albumId = songifyCrudFacade.addAlbumWithSong(album).id();
+        assertThat(songifyCrudFacade.findSongsByAlbumId(albumId).isEmpty());
+
+        // when
+        songifyCrudFacade.addSongToAlbum(albumId, songId);
+
+        // then
+        assertThat(songifyCrudFacade.findSongsByAlbumId(albumId).size()).isEqualTo(1);
+        assertThat(songifyCrudFacade.findSongsByAlbumId(albumId).stream().findFirst().get().getName()).isEqualTo("Wujek Dobra Rada");
+    }
+
+    // Przykład 2 - Kiedy dodajemy artystę do albumu
+    @Test
+    @DisplayName("Should add artist 'Pezet' to album 'Pocztówka z WWA, lato 2K19' by id")
+    public void should_add_artist_pezet_to_album_pocztowka_z_wwa_lato_2k19_by_id() {
+        // given
+        ArtistRequestDto artist = ArtistRequestDto.builder()
+                .name("Pezet")
+                .build();
+        Long artistId = songifyCrudFacade.addArtist(artist).id();
+
+        CreateSongRequestDto song = CreateSongRequestDto.builder()
+                .name("Wujek Dobra Rada")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId = songifyCrudFacade.addSong(song).id();
+
+        AlbumWithSongsRequestDto album = AlbumWithSongsRequestDto.builder()
+                .title("Pocztówka z WWA, lato 2K19")
+                .build();
+        Long albumId = songifyCrudFacade.addAlbumWithSong(album).id();
+        assertThat(songifyCrudFacade.findArtistsByAlbumId(albumId).isEmpty());
+
+        // when
+        songifyCrudFacade.addArtistToAlbum(albumId, artistId);
+
+        // then
+        assertThat(songifyCrudFacade.findArtistsByAlbumId(albumId).size()).isEqualTo(1);
+        assertThat(songifyCrudFacade.findArtistsByAlbumId(albumId).stream().findFirst().get().getName()).isEqualTo("Pezet");
+    }
+
+    // Przykład 3 - Kiedy zmieniamy nazwę albumu
+    @Test
+    @DisplayName("Should update album 'Pocztówka z WWA, lato 2K19' title to '1-800 Oświecenie' by id")
+    public void should_update_album_pocztowka_z_wwa_lato_2k19_title_to_1_800_oswiecenie_by_id() {
+        // given
+        CreateSongRequestDto song = CreateSongRequestDto.builder()
+                .name("Pakiet Platinium")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId = songifyCrudFacade.addSong(song).id();
+
+        AlbumWithSongsRequestDto album = AlbumWithSongsRequestDto.builder()
+                .title("Pocztówka z WWA, lato 2K19")
+                .build();
+        Long albumId = songifyCrudFacade.addAlbumWithSong(album).id();
+        assertThat(songifyCrudFacade.findAlbumById(albumId).getTitle()).isEqualTo("Pocztówka z WWA, lato 2K19");
+
+        // when
+        AlbumDto result = songifyCrudFacade.updateAlbumTitle(albumId, "1-800 Oświecenie");
+
+        // then
+        assertThat(result.title()).isEqualTo("1-800 Oświecenie");
+    }
+
+    // Wymaganie 13 - można edytować piosenkę (czas trwania, artystę, nazwę piosenki)
+    @Test
+    @DisplayName("Should update song 'Imię' to 'Nametag' by id")
+    public void should_update_song_imie_to_nametag_by_id() {
+        // given
+        CreateSongRequestDto song = CreateSongRequestDto.builder()
+                .name("Imię")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId = songifyCrudFacade.addSong(song).id();
+
+        ArtistRequestDto artist = ArtistRequestDto.builder()
+                .name("Taco Hemingway")
+                .build();
+        Long artistId = songifyCrudFacade.addArtist(artist).id();
+        assertThat(songifyCrudFacade.findSongDtoById(songId).name()).isEqualTo("Imię");
+
+        // when
+        SongUpdateDto result = songifyCrudFacade.updateSong(new SongUpdateDto(songId, "Nametag", 180L, Instant.now(), SongLanguageDto.POLISH, artistId));
+
+        // then
+        assertThat(result.name()).isEqualTo("Nametag");
+    }
+
+    // Wymaganie 14 - można przypisać piosenki tylko do albumów
+    @Test
+    @DisplayName("Should assign song 'Nametag' to album '1-800 Oświecenie' by id")
+    public void should_assign_song_nametag_to_album_1_800_oswiecenie_by_id() {
+        // given
+        CreateSongRequestDto song = CreateSongRequestDto.builder()
+                .name("Nametag")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId = songifyCrudFacade.addSong(song).id();
+
+        AlbumWithSongsRequestDto album = AlbumWithSongsRequestDto.builder()
+                .title("1-800 Oświecenie")
+                .build();
+        Long albumId = songifyCrudFacade.addAlbumWithSong(album).id();
+        assertThat(songifyCrudFacade.findSongsByAlbumId(albumId)).isEmpty();
+        assertThat(songifyCrudFacade.findAlbumById(albumId).getTitle()).isEqualTo("1-800 Oświecenie");
+
+        // when
+        songifyCrudFacade.assignSongToAlbum(songId, albumId);
+
+        // then
+        assertThat(songifyCrudFacade.findSongsByAlbumId(albumId).size()).isEqualTo(1);
+        assertThat(songifyCrudFacade.findSongsByAlbumId(albumId).stream().findFirst().get().getName()).isEqualTo("Nametag");
+    }
+
+    // Wymaganie 15 - można przypisać piosenki do artysty (poprzez album)
+    @Test
+    @DisplayName("Should assign song 'Nametag' to artist 'Taco Hemingway' by id via album '1-800 Oświecenie'")
+    public void should_assign_song_nametag_to_artist_taco_hemingway_by_id_via_album_1_800_oswiecenie() {
+        // given
+        CreateSongRequestDto song = CreateSongRequestDto.builder()
+                .name("Nametag")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId = songifyCrudFacade.addSong(song).id();
+
+        AlbumWithSongsRequestDto album = AlbumWithSongsRequestDto.builder()
+                .title("1-800 Oświecenie")
+                .build();
+        Long albumId = songifyCrudFacade.addAlbumWithSong(album).id();
+
+        ArtistRequestDto artist = ArtistRequestDto.builder()
+                .name("Taco Hemingway")
+                .build();
+        Long artistId = songifyCrudFacade.addArtist(artist).id();
+        assertThat(songifyCrudFacade.findArtistsByAlbumId(albumId).isEmpty());
+
+        // when
+        songifyCrudFacade.assignSongToArtist(new SongArtistDto(songId, albumId, artistId));
+
+        // then
+        assertThat(songifyCrudFacade.findArtistsByAlbumId(albumId).size()).isEqualTo(1);
+        assertThat(songifyCrudFacade.findArtistsByAlbumId(albumId).stream().findFirst().get().getName()).isEqualTo("Taco Hemingway");
+    }
+
 }

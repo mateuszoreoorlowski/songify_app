@@ -20,7 +20,11 @@ class SongAssigner {
     public SongAlbumDto assignSongToAlbum(Long songId, Long albumId) {
         Song song = songRetriever.findSongById(songId);
         Album album = albumRetriever.findById(albumId);
+
+        album.getSongs().add(song);
         song.setAlbum(album);
+        songRepository.save(song);
+        albumRepository.save(album);
 
         SongDto songDto = SongDto.builder()
                 .id(song.getId())

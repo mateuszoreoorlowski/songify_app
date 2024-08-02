@@ -179,4 +179,8 @@ public class SongifyCrudFacade {
     public Artist findArtistById(Long artistId) {
         return artistRetriever.findArtistById(artistId);
     }
+
+    public Genre findGenreById(Long genreId) {
+        return genreRetriever.findById(genreId);
+    }
 }
