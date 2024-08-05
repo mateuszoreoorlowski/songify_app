@@ -117,6 +117,12 @@ class HappyPathIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is("updated")));
 //        8. when I go to /song/1 then I can see "Rap" genre
+        mockMvc.perform(get("/songs/1")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.genre.id", is(2)))
+                .andExpect(jsonPath("$.genre.name", is("Rap")));
 //        9. when I go to /albums then I can see no albums
 //        10. when I post to /albums with Album "04:01" and Song with id 1 then Album "04:01" is returned with id 1
 //        11. when I go to /albums/1 then I can not see any albums because there is no artist in system

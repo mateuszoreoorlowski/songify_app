@@ -7,10 +7,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.songify_app.domain.crud.SongifyCrudFacade;
-import spring.songify_app.domain.crud.dto.SongAlbumDto;
-import spring.songify_app.domain.crud.dto.SongArtistDto;
-import spring.songify_app.domain.crud.dto.SongDto;
-import spring.songify_app.domain.crud.dto.SongUpdateDto;
+import spring.songify_app.domain.crud.dto.*;
 import spring.songify_app.infrastructure.crud.song.request.CreateSongRequestDto;
 import spring.songify_app.infrastructure.crud.song.response.AllSongsResponseDto;
 import spring.songify_app.infrastructure.crud.song.response.AssignGenreToSongDto;
@@ -82,13 +79,14 @@ class SongController {
     @GetMapping("/{id}")
     ResponseEntity<GetSongResponseDto> getSongById(@PathVariable Long id, @RequestHeader(required = false) String requestId) {
         SongDto song = songifyCrudFacade.findSongDtoById(id);
+        GenreDto genre = songifyCrudFacade.findGenreBySongId(id);
         GetSongResponseDto response = new GetSongResponseDto(SongDto.builder()
                 .id(song.id())
                 .name(song.name())
                 .duration(song.duration())
                 .releaseDate(song.releaseDate())
                 .language(song.language())
-                .build());
+                .build(), genre);
         return ResponseEntity.ok(response);
     }
 }

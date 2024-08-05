@@ -56,4 +56,12 @@ class GenreRetriever {
                 .map(Song::getGenre)
                 .orElseThrow(() -> new GenreNotFoundException("Genre with song id " + songId + " not found"));
     }
+
+    public GenreDto findGenreBySongId(Long id) {
+        return songRepository.findById(id)
+                .map(song -> new GenreDto(
+                        song.getGenre().getId(),
+                        song.getGenre().getName()))
+                .orElseThrow(() -> new GenreNotFoundException("Genre with song id " + id + " not found"));
+    }
 }
