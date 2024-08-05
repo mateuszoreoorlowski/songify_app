@@ -1,7 +1,5 @@
 package spring.songify_app.domain.crud;
 
-import org.springframework.data.domain.Pageable;
-
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -57,5 +55,13 @@ class InMemorySongRepository implements SongRepository {
     @Override
     public void deleteById(Long id) {
         db.remove(id);
+    }
+
+    @Override
+    public List<Song> findByGenreId(Long genreId) {
+        return db.values().stream()
+                .filter(
+                        song -> song.getGenre() != null && song.getGenre().getId().equals(genreId))
+                .collect(Collectors.toList());
     }
 }

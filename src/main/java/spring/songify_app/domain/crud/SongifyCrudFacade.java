@@ -11,6 +11,7 @@ import spring.songify_app.infrastructure.crud.artist.dto.request.ArtistRequestDt
 import spring.songify_app.infrastructure.crud.genre.request.GenreRequestDto;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -190,5 +191,13 @@ public class SongifyCrudFacade {
 
     public String getGenreNameForSong(Long songId) {
         return songRetriever.getGenreNameForSong(songId);
+    }
+
+    public List<SongDto> findSongsByGenreId(Long genreId) {
+        return songRetriever.findSongsByGenreId(genreId);
+    }
+
+    public GenreWithSongsDto getGenreWithSongs(Long genreId) {
+        return genreRetriever.retrieveGenreWithSongs(genreId);
     }
 }

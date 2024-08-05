@@ -728,4 +728,200 @@ class SongifyCrudFacadeTest {
                 .extracting(GenreDto::id)
                 .containsExactlyInAnyOrder(0L, genreId1, genreId2);
     }
+
+    // Wymaganie 21 - można wyświetlać wszystkich artystów
+    @Test
+    @DisplayName("Should return all artists")
+    public void should_return_all_artists() {
+        // given
+        ArtistRequestDto artist1 = ArtistRequestDto.builder()
+                .name("Taco Hemingway")
+                .build();
+        Long artistId1 = songifyCrudFacade.addArtist(artist1).id();
+
+        ArtistRequestDto artist2 = ArtistRequestDto.builder()
+                .name("Dawid Podsiadło")
+                .build();
+        Long artistId2 = songifyCrudFacade.addArtist(artist2).id();
+
+        // when
+        Set<ArtistDto> allArtists = songifyCrudFacade.findAllArtists();
+
+        // then
+        assertThat(allArtists.size()).isEqualTo(2);
+        assertThat(allArtists)
+                .extracting(ArtistDto::id)
+                .containsExactlyInAnyOrder(artistId1, artistId2);
+    }
+
+    // Wymaganie 22 - można wyświetlać wszystkie albumy
+    @Test
+    @DisplayName("Should return all albums")
+    public void should_return_all_albums() {
+        // given
+        CreateSongRequestDto song1 = CreateSongRequestDto.builder()
+                .name("Nametag")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId1 = songifyCrudFacade.addSong(song1).id();
+
+        CreateSongRequestDto song2 = CreateSongRequestDto.builder()
+                .name("ZTM")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId2 = songifyCrudFacade.addSong(song2).id();
+
+        AlbumWithSongsRequestDto album1 = AlbumWithSongsRequestDto.builder()
+                .title("1-800 Oświecenie")
+                .build();
+        Long albumId1 = songifyCrudFacade.addAlbumWithSong(album1).id();
+
+        AlbumWithSongsRequestDto album2 = AlbumWithSongsRequestDto.builder()
+                .title("Cafe Belga")
+                .build();
+        Long albumId2 = songifyCrudFacade.addAlbumWithSong(album2).id();
+
+        // when
+        Set<AlbumDto> allAlbums = songifyCrudFacade.findAllAlbums();
+
+        // then
+        assertThat(allAlbums.size()).isEqualTo(2);
+        assertThat(allAlbums)
+                .extracting(AlbumDto::id)
+                .containsExactlyInAnyOrder(albumId1, albumId2);
+    }
+
+    // Wymaganie 23 - można wyświetlać konkretne albumy z artystami oraz piosenkami w albumie
+    @Test
+    @DisplayName("Should return album '1-800 Oświecenie' with artist 'Taco Hemingway' and song 'Nametag' and 'Pakiet Platinium' by id")
+    public void should_return_album_1_800_oswiecenie_with_artist_taco_hemingway_and_song_nametag_and_pakiet_platinium_by_id() {
+        // given
+        ArtistRequestDto artist = ArtistRequestDto.builder()
+                .name("Taco Hemingway")
+                .build();
+        Long artistId = songifyCrudFacade.addArtist(artist).id();
+
+        CreateSongRequestDto song1 = CreateSongRequestDto.builder()
+                .name("Nametag")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId1 = songifyCrudFacade.addSong(song1).id();
+
+        CreateSongRequestDto song2 = CreateSongRequestDto.builder()
+                .name("Pakiet Platinium")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId2 = songifyCrudFacade.addSong(song2).id();
+
+        AlbumWithSongsRequestDto album = AlbumWithSongsRequestDto.builder()
+                .title("1-800 Oświecenie")
+                .build();
+        Long albumId = songifyCrudFacade.addAlbumWithSong(album).id();
+
+        songifyCrudFacade.addSongToAlbum(albumId, songId1);
+        songifyCrudFacade.addSongToAlbum(albumId, songId2);
+        songifyCrudFacade.addArtistToAlbum(artistId, albumId);
+
+        assertThat(songifyCrudFacade.findAlbumsByArtistId(artistId).size()).isEqualTo(1);
+        assertThat(songifyCrudFacade.findSongsByAlbumId(albumId).size()).isEqualTo(2);
+        assertThat(songifyCrudFacade.findArtistsByAlbumId(albumId).stream().findFirst().get().getName()).isEqualTo("Taco Hemingway");
+
+        // when
+        AlbumInfo albumInfo = songifyCrudFacade.findAlbumByIdWithArtistsAndSongs(albumId);
+
+        // then
+        assertThat(albumInfo).isNotNull();
+        assertThat(albumInfo.getTitle()).isEqualTo("1-800 Oświecenie");
+        assertThat(albumInfo.getArtists()).hasSize(1);
+        assertThat(albumInfo.getArtists().stream().anyMatch(artistDto -> artistDto.getName().equals("Taco Hemingway"))).isTrue();
+        assertThat(albumInfo.getSongs()).hasSize(2);
+        assertThat(albumInfo.getSongs().stream().anyMatch(song -> song.getName().equals("Nametag"))).isTrue();
+        assertThat(albumInfo.getSongs().stream().anyMatch(song -> song.getName().equals("Pakiet Platinium"))).isTrue();
+    }
+
+    // Wymaganie 24 - można wyświetlać konkretne gatunki muzyczne wraz z piosenkami
+    @Test
+    @DisplayName("Should return genre 'Rap' with song 'Nametag' and 'Pakiet Platinium' by id")
+    public void should_return_genre_rap_with_song_nametag_and_pakiet_platinium_by_id() {
+        // given
+        GenreRequestDto genre = GenreRequestDto.builder()
+                .name("Rap")
+                .build();
+        Long genreId = songifyCrudFacade.addGenre(genre).id();
+
+        CreateSongRequestDto song1 = CreateSongRequestDto.builder()
+                .name("Nametag")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId1 = songifyCrudFacade.addSong(song1).id();
+
+        CreateSongRequestDto song2 = CreateSongRequestDto.builder()
+                .name("Pakiet Platinium")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId2 = songifyCrudFacade.addSong(song2).id();
+
+        songifyCrudFacade.assignGenreToSong(genreId, songId1);
+        songifyCrudFacade.assignGenreToSong(genreId, songId2);
+
+        assertThat(songifyCrudFacade.findSongsByGenreId(genreId).size()).isEqualTo(2);
+
+        // when
+        GenreWithSongsDto genreInfo = songifyCrudFacade.getGenreWithSongs(genreId);
+
+        // then
+        assertThat(genreInfo).isNotNull();
+        assertThat(genreInfo.name()).isEqualTo("Rap");
+        assertThat(genreInfo.songs()).hasSize(2);
+        assertThat(genreInfo.songs().stream().anyMatch(song -> song.name().equals("Nametag"))).isTrue();
+        assertThat(genreInfo.songs().stream().anyMatch(song -> song.name().equals("Pakiet Platinium"))).isTrue();
+    }
+
+    // Wymaganie 25 - można wyświetlać konkretnych artystów wraz z ich albumami
+    @Test
+    @DisplayName("Should return artist 'Taco Hemingway' with album '1-800 Oświecenie' and 'Cafe Belga' by id")
+    public void should_return_artist_taco_hemingway_with_album_1_800_oswiecenie_and_cafe_belga_by_id() {
+        // given
+        ArtistRequestDto artist = ArtistRequestDto.builder()
+                .name("Taco Hemingway")
+                .build();
+        Long artistId = songifyCrudFacade.addArtist(artist).id();
+
+        CreateSongRequestDto song1 = CreateSongRequestDto.builder()
+                .name("Nametag")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId1 = songifyCrudFacade.addSong(song1).id();
+
+        CreateSongRequestDto song2 = CreateSongRequestDto.builder()
+                .name("ZTM")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId2 = songifyCrudFacade.addSong(song2).id();
+
+        AlbumWithSongsRequestDto album1 = AlbumWithSongsRequestDto.builder()
+                .title("1-800 Oświecenie")
+                .build();
+        Long albumId1 = songifyCrudFacade.addAlbumWithSong(album1).id();
+
+        AlbumWithSongsRequestDto album2 = AlbumWithSongsRequestDto.builder()
+                .title("Cafe Belga")
+                .build();
+        Long albumId2 = songifyCrudFacade.addAlbumWithSong(album2).id();
+
+        songifyCrudFacade.addArtistToAlbum(artistId, albumId1);
+        songifyCrudFacade.addArtistToAlbum(artistId, albumId2);
+
+        assertThat(songifyCrudFacade.findAlbumsByArtistId(artistId).size()).isEqualTo(2);
+
+        // when
+        ArtistWithAlbumsDto artistInfo = songifyCrudFacade.retrieveArtistWithAlbums(artistId);
+
+        // then
+        assertThat(artistInfo).isNotNull();
+        assertThat(artistInfo.name()).isEqualTo("Taco Hemingway");
+        assertThat(artistInfo.albums()).hasSize(2);
+        assertThat(artistInfo.albums().stream().anyMatch(album -> album.title().equals("1-800 Oświecenie"))).isTrue();
+        assertThat(artistInfo.albums().stream().anyMatch(album -> album.title().equals("Cafe Belga"))).isTrue();
+    }
 }
