@@ -66,11 +66,11 @@ class SongController {
     }
 
     @PutMapping("/{songId}/genres/{genreId}")
-    ResponseEntity<AssignGenreToSongDto> assignGenreToSong(
+    ResponseEntity<String> assignGenreToSong(
             @PathVariable Long songId,
             @PathVariable Long genreId) {
         songifyCrudFacade.assignGenreToSong(genreId, songId);
-        return ResponseEntity.ok(new AssignGenreToSongDto(songId, genreId));
+        return ResponseEntity.ok("updated");
     }
 
     @DeleteMapping("/{songId}/album/{albumId}")
