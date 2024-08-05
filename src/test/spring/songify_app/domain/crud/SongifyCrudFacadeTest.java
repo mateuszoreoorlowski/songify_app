@@ -586,4 +586,146 @@ class SongifyCrudFacadeTest {
         assertThat(songifyCrudFacade.findArtistsByAlbumId(albumId).stream().findFirst().get().getName()).isEqualTo("Taco Hemingway");
     }
 
+    // Wymaganie 16 - można przypisać artystów do albumów (album może mieć więcej artystów, artysta może mieć kilka albumów)
+    @Test
+    @DisplayName("Should assign artist 'Taco Hemingway' to album '1-800 Oświecenie' and 'Cafe Belga' by id")
+    public void should_assign_artist_taco_hemingway_to_album_1_800_oswiecenie_and_cafe_belga_by_id() {
+        // given
+        ArtistRequestDto artist = ArtistRequestDto.builder()
+                .name("Taco Hemingway")
+                .build();
+        Long artistId = songifyCrudFacade.addArtist(artist).id();
+
+        CreateSongRequestDto song1 = CreateSongRequestDto.builder()
+                .name("Nametag")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        songifyCrudFacade.addSong(song1);
+
+        CreateSongRequestDto song2 = CreateSongRequestDto.builder()
+                .name("ZTM")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        songifyCrudFacade.addSong(song2);
+
+        AlbumWithSongsRequestDto album1 = AlbumWithSongsRequestDto.builder()
+                .title("1-800 Oświecenie")
+                .build();
+        Long albumId1 = songifyCrudFacade.addAlbumWithSong(album1).id();
+        assertThat(songifyCrudFacade.findArtistsByAlbumId(albumId1).isEmpty()).isTrue();
+
+        AlbumWithSongsRequestDto album2 = AlbumWithSongsRequestDto.builder()
+                .title("Cafe Belga")
+                .build();
+        Long albumId2 = songifyCrudFacade.addAlbumWithSong(album2).id();
+        assertThat(songifyCrudFacade.findArtistsByAlbumId(albumId2).isEmpty()).isTrue();
+
+        // when
+        songifyCrudFacade.addArtistToAlbum(artistId, albumId1);
+        songifyCrudFacade.addArtistToAlbum(artistId, albumId2);
+
+        // then
+        assertThat(songifyCrudFacade.findArtistsByAlbumId(albumId1).size()).isEqualTo(1);
+        assertThat(songifyCrudFacade.findArtistsByAlbumId(albumId1).stream().findFirst().get().getName()).isEqualTo("Taco Hemingway");
+        assertThat(songifyCrudFacade.findArtistsByAlbumId(albumId2).size()).isEqualTo(1);
+        assertThat(songifyCrudFacade.findArtistsByAlbumId(albumId2).stream().findFirst().get().getName()).isEqualTo("Taco Hemingway");
+    }
+
+    // Wymaganie 17 - można przypisać tylko jeden gatunek muzyczny do piosenki
+    @Test
+    @DisplayName("Should assign genre 'Rap' to song 'Nametag' by id")
+    public void should_assign_genre_rap_to_song_nametag_by_id() {
+        // given
+        GenreRequestDto genre = GenreRequestDto.builder()
+                .name("Rap")
+                .build();
+        Long genreId = songifyCrudFacade.addGenre(genre).id();
+
+        CreateSongRequestDto song = CreateSongRequestDto.builder()
+                .name("Nametag")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId = songifyCrudFacade.addSong(song).id();
+
+        assertThat(songifyCrudFacade.findSongDtoById(songId).name()).isEqualTo("Nametag");
+        assertThat(songifyCrudFacade.findGenreById(genreId).getName()).isEqualTo("Rap");
+
+        // when
+        songifyCrudFacade.assignGenreToSong(genreId, songId);
+
+        // then
+        assertThat(songifyCrudFacade.findGenresBySongId(songId).getName()).isEqualTo("Rap");
+    }
+
+    // Wymaganie 18 - gdy nie ma przypisanego gatunku muzycznego do piosenki, to wyświetlamy "default"
+    @Test
+    @DisplayName("Should return 'default' When there is no genre assigned to song 'Nametag'")
+    public void should_return_default_when_there_is_no_genre_assigned_to_song_nametag() {
+        // given
+        CreateSongRequestDto song = CreateSongRequestDto.builder()
+                .name("Nametag")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId = songifyCrudFacade.addSong(song).id();
+        assertThat(songifyCrudFacade.findSongDtoById(songId).name()).isEqualTo("Nametag");
+        assertThat(songifyCrudFacade.findAllSongs().size()).isEqualTo(1);
+
+        // when
+        String genreNameForSong = songifyCrudFacade.getGenreNameForSong(songId);
+
+        // then
+        assertThat(genreNameForSong).isEqualTo("default");
+    }
+
+    // Wymaganie 19 - można wyświetlać wszystkie piosenki
+    @Test
+    @DisplayName("Should return all songs")
+    public void should_return_all_songs() {
+        // given
+        CreateSongRequestDto song1 = CreateSongRequestDto.builder()
+                .name("Nametag")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId1 = songifyCrudFacade.addSong(song1).id();
+
+        CreateSongRequestDto song2 = CreateSongRequestDto.builder()
+                .name("ZTM")
+                .language(SongLanguageDto.POLISH)
+                .build();
+        Long songId2 = songifyCrudFacade.addSong(song2).id();
+
+        // when
+        Set<SongDto> allSongs = songifyCrudFacade.findAllSongs();
+
+        // then
+        assertThat(allSongs.size()).isEqualTo(2);
+        assertThat(allSongs)
+                .extracting(SongDto::id)
+                .containsExactlyInAnyOrder(songId1, songId2);
+    }
+
+    // Wymaganie 20 - można wyświetlać wszystkie gatunki
+    @Test
+    @DisplayName("Should return all genres")
+    public void should_return_all_genres() {
+        // given
+        GenreDto genre1 = GenreDto.builder()
+                .name("Rap")
+                .build();
+        Long genreId1 = songifyCrudFacade.addGenre(new GenreRequestDto(1L, genre1.name())).id();
+
+        GenreDto genre2 = GenreDto.builder()
+                .name("Pop")
+                .build();
+        Long genreId2 = songifyCrudFacade.addGenre(new GenreRequestDto(2L, genre1.name())).id();
+
+        // when
+        Set<GenreDto> allGenres = songifyCrudFacade.findAllGenres();
+
+        // then
+        assertThat(allGenres.size()).isEqualTo(3);
+        assertThat(allGenres)
+                .extracting(GenreDto::id)
+                .containsExactlyInAnyOrder(0L, genreId1, genreId2);
+    }
 }

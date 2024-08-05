@@ -45,4 +45,11 @@ class SongRetriever {
                         .build())
                 .orElseThrow(() -> new SongNotFoundException("Song with id: " + id + " not found"));
     }
+
+    String getGenreNameForSong(Long songId) {
+        Song song = findSongById(songId);
+        Genre genre = song.getGenre();
+
+        return genre != null ? genre.getName() : "default";
+    }
 }
