@@ -15,6 +15,7 @@ import spring.songify_app.infrastructure.crud.song.request.CreateSongRequestDto;
 import spring.songify_app.infrastructure.crud.song.response.AllSongsResponseDto;
 import spring.songify_app.infrastructure.crud.song.response.AssignGenreToSongDto;
 import spring.songify_app.infrastructure.crud.song.response.CreateSongResponseDto;
+import spring.songify_app.infrastructure.crud.song.response.GetSongResponseDto;
 
 import java.util.Set;
 
@@ -76,5 +77,18 @@ class SongController {
     public ResponseEntity<String> deleteSong(@PathVariable Long songId, @PathVariable Long albumId) {
         songifyCrudFacade.deleteSongFromAlbumById(songId, albumId);
         return ResponseEntity.ok("probably song deleted :)");
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<GetSongResponseDto> getSongById(@PathVariable Long id, @RequestHeader(required = false) String requestId) {
+        SongDto song = songifyCrudFacade.findSongDtoById(id);
+        GetSongResponseDto response = new GetSongResponseDto(SongDto.builder()
+                .id(song.id())
+                .name(song.name())
+                .duration(song.duration())
+                .releaseDate(song.releaseDate())
+                .language(song.language())
+                .build());
+        return ResponseEntity.ok(response);
     }
 }
