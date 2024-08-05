@@ -46,4 +46,16 @@ interface AlbumRepository extends Repository<Album, Long> {
     @Modifying
     @Query("delete from Album a where a.id = :albumId")
     int deleteById(Long albumId);
+
+    @Query("""
+            SELECT a.songs FROM Album a
+            WHERE a.id = :albumId
+            """)
+    Set<Song> findSongsByAlbumId(@Param("albumId") Long albumId);
+
+    @Query("""
+            SELECT a.artists FROM Album a
+            WHERE a.id = :albumId
+            """)
+    Set<Artist> findArtistsByAlbumId(@Param("albumId") Long albumId);
 }

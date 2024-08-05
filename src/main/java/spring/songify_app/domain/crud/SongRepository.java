@@ -29,4 +29,12 @@ interface SongRepository extends Repository<Song, Long> {
     @Modifying
     @Query("DELETE FROM Song s WHERE s.id = :id")
     void deleteById(Long id);
+
+    @Modifying
+    @Query("""
+            SELECT s FROM Song s
+            join fetch s.genre g
+            WHERE g.id = :genreId
+            """)
+    List<Song> findByGenreId(Long genreId);
 }

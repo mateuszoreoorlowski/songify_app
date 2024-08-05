@@ -7,6 +7,7 @@ import java.time.Instant;
 
 @Builder
 public record CreateSongRequestDto(
+        Long id,
         String name,
         Instant releaseDate,
         Long duration,
