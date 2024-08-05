@@ -66,7 +66,24 @@ class HappyPathIntegrationTest {
                 .andExpect(jsonPath("$.duration", is(161)))
                 .andExpect(jsonPath("$.language", is("POLISH")));
 //        3. when I post to /song with Song "Tylko ciemność" then Song "Tylko ciemność" is returned with id 2
+        mockMvc.perform(post("/songs")
+                        .content("""
+                                {
+                                  "name": "Tylko ciemność",
+                                  "releaseDate": "2024-07-25T13:55:21.850Z",
+                                  "duration": 192,
+                                  "language": "POLISH"
+                                }
+                                """.trim())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(2)))
+                .andExpect(jsonPath("$.name", is("Tylko ciemność")))
+                .andExpect(jsonPath("$.releaseDate", is("2024-07-25T13:55:21.850Z")))
+                .andExpect(jsonPath("$.duration", is(192)))
+                .andExpect(jsonPath("$.language", is("POLISH")));
 //        4. when I go to /genre then I can see only default genre with id 1
+
 //        5. when I post to /genre with Genre "Rap" then Genre "Rap" is returned with id 2
 //        6. when I go to /song/1 then I can see default genre with id 1 and name default
 //        7. when I put to /song/1/genre/1 then Genre with id 2 ("Rap") is added to Song with id 1 ("Mrugnąłem tylko raz")
