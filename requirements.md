@@ -8,7 +8,7 @@ SONGIFY: APLIKACJA DO ZARZĄDZANIA ALBUMAMI, ARTYSTAMI I PIOSENKAMI
 ~~6. można usunąć artystę (usuwamy wtedy jego piosenki oraz albumy, ale jeśli było więcej niż jeden artysta w albumie, to usuwamy tylko artystę z albumu i samego artystę)~~
 ~~7. można usunąć gatunek muzyczny (ale nie może istnieć piosenka z takim gatunkiem)~~
 ~~8. można usunąć album (ale dopiero wtedy, kiedy nie ma już żadnej piosenki przypisanej do albumu)~~
-9. można usunąć piosenkę, ale nie usuwamy albumu i artystów, gdy była tylko 1 piosenka w albumie
+~~9. można usunąć piosenkę, ale nie usuwamy albumu i artystów, gdy była tylko 1 piosenka w albumie~~
 ~~10. można edytować nazwę artysty~~
 ~~11. można edytować nazwę gatunku muzycznego~~
 ~~12. można edytować album (dodawać piosenki, artystów, zmieniać nazwę albumu)~~
@@ -25,7 +25,21 @@ SONGIFY: APLIKACJA DO ZARZĄDZANIA ALBUMAMI, ARTYSTAMI I PIOSENKAMI
 ~~23. można wyświetlać konkretne albumy z artystami oraz piosenkami w albumie~~
 ~~24. można wyświetlać konkretne gatunki muzyczne wraz z piosenkami~~
 ~~25. można wyświetlać konkretnych artystów wraz z ich albumami~~
-26. chcemy mieć trwałe dane
+~~26. chcemy mieć trwałe dane~~
+
+----- SECURITY -----
+27. Kazdy bez uwierzytelnienia (authentication) moze przegladac piosenki, albumy itp (gosc niezalogowany)~~
+28. Są 2 role: ROLE_USER i ROLE_ADMIN
+29. Uzywanie bezstanowego tokena JWT (uzyskuje go po zalogowaniu) - wlasna implementacja authorization i potem oauth2 google 
+30. tylko admin moze przejrzec loginy i role uzytkownikow endpoint /users
+31. zeby zostac uzytkownikiem trzeba sie zarejestrowac login/haslo - wlasna implementacja i GOOGLE
+32. zapisujemy uzytkownika i admina do bazy danych (w przypadku wlasnej implementacji) - admin tworzony w migracji flyway
+33. uzytkownik moze wyswietlac piosenki, ale nie moze zarzadzac (w przyszlosci uzytkownik moze miec swoj profil, a tam "ulubione piosenki") - ROLE_USER
+34. tylko admin moze zmieniac stan aplikacji (usuwac, dodawac, edytowac piosenki/albumy itp)
+35. chcemy miec szyfrowanie HTTPS, certyfikat wygenerowany recznie openssl 
+36. chcemy miec obsługe CORS - zapytania z domeny frontendowej 
+37. chcemy zabezpiecznie CSRF bo bedzie frontend uzywany 
+38. jako bonus potwierdzenie e-maila po rejestracji
 
 
 HAPPY PATH (user tworzy album "04:01" dla artysty "Kękę" z piosenkami "Mrugnąłem tylko raz", "Tylko ciemność", o gatunku Rap)
