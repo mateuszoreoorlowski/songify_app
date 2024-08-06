@@ -1,6 +1,6 @@
 INSERT INTO song (name, duration, release_date, language, album_id, genre_id)
 VALUES
-    ('Bohemian Rhapsody', 355, '2023-01-01 10:00:00', 'ENGLISH', 1, 2),
+    ('Bohemian Rhapsody', 355, '2023-01-01 10:00:00', 'ENGLISH', 1, 1),
     ('Shape of You', 235, '2023-01-02 11:15:00', 'ENGLISH', 1, 2),
     ('Rolling in the Deep', 212, '2023-01-03 12:30:00', 'ENGLISH', 1, 3),
     ('Purple Haze', 180, '2023-01-04 13:45:00', 'ENGLISH', 2, 4),

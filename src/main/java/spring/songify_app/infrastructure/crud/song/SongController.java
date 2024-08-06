@@ -7,14 +7,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.songify_app.domain.crud.SongifyCrudFacade;
-import spring.songify_app.domain.crud.dto.SongAlbumDto;
-import spring.songify_app.domain.crud.dto.SongArtistDto;
-import spring.songify_app.domain.crud.dto.SongDto;
-import spring.songify_app.domain.crud.dto.SongUpdateDto;
+import spring.songify_app.domain.crud.dto.*;
 import spring.songify_app.infrastructure.crud.song.request.CreateSongRequestDto;
 import spring.songify_app.infrastructure.crud.song.response.AllSongsResponseDto;
 import spring.songify_app.infrastructure.crud.song.response.AssignGenreToSongDto;
 import spring.songify_app.infrastructure.crud.song.response.CreateSongResponseDto;
+import spring.songify_app.infrastructure.crud.song.response.GetSongResponseDto;
 
 import java.util.Set;
 
@@ -65,16 +63,30 @@ class SongController {
     }
 
     @PutMapping("/{songId}/genres/{genreId}")
-    ResponseEntity<AssignGenreToSongDto> assignGenreToSong(
+    ResponseEntity<String> assignGenreToSong(
             @PathVariable Long songId,
             @PathVariable Long genreId) {
         songifyCrudFacade.assignGenreToSong(genreId, songId);
-        return ResponseEntity.ok(new AssignGenreToSongDto(songId, genreId));
+        return ResponseEntity.ok("updated");
     }
 
     @DeleteMapping("/{songId}/album/{albumId}")
     public ResponseEntity<String> deleteSong(@PathVariable Long songId, @PathVariable Long albumId) {
         songifyCrudFacade.deleteSongFromAlbumById(songId, albumId);
         return ResponseEntity.ok("probably song deleted :)");
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<GetSongResponseDto> getSongById(@PathVariable Long id, @RequestHeader(required = false) String requestId) {
+        SongDto song = songifyCrudFacade.findSongDtoById(id);
+        GenreDto genre = songifyCrudFacade.findGenreBySongId(id);
+        GetSongResponseDto response = new GetSongResponseDto(SongDto.builder()
+                .id(song.id())
+                .name(song.name())
+                .duration(song.duration())
+                .releaseDate(song.releaseDate())
+                .language(song.language())
+                .build(), genre);
+        return ResponseEntity.ok(response);
     }
 }

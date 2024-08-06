@@ -33,7 +33,7 @@ class AlbumController {
     @PostMapping
     ResponseEntity<AlbumWithSongsResponseDto> addAlbumWithSongs(@RequestBody AlbumWithSongsRequestDto albumRequestDto) {
         AlbumWithSongsDto albumDto = songifyCrudFacade.addAlbumWithSong(albumRequestDto);
-        return ResponseEntity.ok(new AlbumWithSongsResponseDto(albumDto.title(), albumDto.releaseDate(), albumDto.songsIds()));
+        return ResponseEntity.ok(new AlbumWithSongsResponseDto(albumDto.id(), albumDto.title(), albumDto.releaseDate(), albumDto.songsIds()));
     }
 
     @PutMapping("/{id}/name")
@@ -49,8 +49,8 @@ class AlbumController {
     }
 
     @PutMapping("/{albumId}/songs/{songId}")
-    public ResponseEntity<AlbumDto> addSongToAlbum(@PathVariable Long albumId, @PathVariable Long songId) {
-        AlbumDto updatedAlbum = songifyCrudFacade.addSongToAlbum(albumId, songId);
+    public ResponseEntity<AlbumWithSongsDto> addSongToAlbum(@PathVariable Long albumId, @PathVariable Long songId) {
+        AlbumWithSongsDto updatedAlbum = songifyCrudFacade.addSongToAlbum(albumId, songId);
         return ResponseEntity.ok(updatedAlbum);
     }
 

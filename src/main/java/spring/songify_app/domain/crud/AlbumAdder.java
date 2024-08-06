@@ -21,8 +21,8 @@ class AlbumAdder {
     private final AlbumRetriever albumRetriever;
     private final ArtistRetriever artistRetriever;
 
-    AlbumWithSongsDto addAlbumWithSongs(String title, Instant releaseDate , Set<Long> ids) {
-        if(ids == null || ids.isEmpty()){
+    AlbumWithSongsDto addAlbumWithSongs(String title, Instant releaseDate, Set<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
             ids = new HashSet<>();
         }
 
@@ -30,16 +30,22 @@ class AlbumAdder {
                 .map(songRetriever::findSongById)
                 .collect(Collectors.toSet());
 
+        System.out.println("Znalezione piosenki: " + songs); // Logowanie znalezionych piosenek
+
         Album album = new Album();
         album.setTitle(title);
         album.setReleaseDate(releaseDate);
         album.addSongToAlbum(songs);
 
         Album savedAlbum = albumRepository.save(album);
-        Set<Long> songsIds = savedAlbum.getSongs().stream().map(Song::getId).collect(Collectors.toSet());
+        System.out.println("Zapisany album: " + savedAlbum); // Logowanie zapisanego albumu
 
-        return new AlbumWithSongsDto(savedAlbum.getId() ,savedAlbum.getTitle(), savedAlbum.getReleaseDate(), songsIds);
+        Set<Long> songsIds = savedAlbum.getSongs().stream().map(Song::getId).collect(Collectors.toSet());
+        System.out.println("ID piosenek w zapisanym albumie: " + songsIds); // Logowanie ID piosenek w albumie
+
+        return new AlbumWithSongsDto(savedAlbum.getId(), savedAlbum.getTitle(), savedAlbum.getReleaseDate(), songsIds);
     }
+
 
     public AlbumDto addArtistToAlbum(Long albumId, Long artistId){
         Album album = albumRetriever.findById(albumId);
@@ -52,13 +58,13 @@ class AlbumAdder {
         return new AlbumDto(album.getId(), album.getTitle());
     }
 
-    public AlbumDto addSongToAlbum(Long albumId, Long songId){
+    public AlbumWithSongsDto addSongToAlbum(Long albumId, Long songId){
         Album album = albumRetriever.findById(albumId);
         Song song = songRetriever.findSongById(songId);
 
         album.getSongs().add(song);
 
         albumRepository.save(album);
-        return new AlbumDto(album.getId(), album.getTitle());
+        return new AlbumWithSongsDto(album.getId(), album.getTitle(), album.getReleaseDate(), album.getSongsIds());
     }
 }
