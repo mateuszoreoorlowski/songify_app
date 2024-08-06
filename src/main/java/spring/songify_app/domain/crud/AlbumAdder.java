@@ -58,13 +58,13 @@ class AlbumAdder {
         return new AlbumDto(album.getId(), album.getTitle());
     }
 
-    public AlbumDto addSongToAlbum(Long albumId, Long songId){
+    public AlbumWithSongsDto addSongToAlbum(Long albumId, Long songId){
         Album album = albumRetriever.findById(albumId);
         Song song = songRetriever.findSongById(songId);
 
         album.getSongs().add(song);
 
         albumRepository.save(album);
-        return new AlbumDto(album.getId(), album.getTitle());
+        return new AlbumWithSongsDto(album.getId(), album.getTitle(), album.getReleaseDate(), album.getSongsIds());
     }
 }

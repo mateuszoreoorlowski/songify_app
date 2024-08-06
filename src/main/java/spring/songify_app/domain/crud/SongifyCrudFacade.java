@@ -89,7 +89,7 @@ public class SongifyCrudFacade {
         return albumAdder.addArtistToAlbum(albumId, artistId);
     }
 
-    public AlbumDto addSongToAlbum(Long albumId, Long songId){
+    public AlbumWithSongsDto addSongToAlbum(Long albumId, Long songId){
         return albumAdder.addSongToAlbum(albumId, songId);
     }
 

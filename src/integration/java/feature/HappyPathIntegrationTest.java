@@ -175,6 +175,13 @@ class HappyPathIntegrationTest {
                 .andExpect(jsonPath("$.songs[*].id", containsInAnyOrder(1)))
                 .andExpect(jsonPath("$.artists[*].id", containsInAnyOrder(1)));
 //        15. when I put to /albums/1/songs/2 then Song with id 2 ("Tylko ciemność") is added to Album with id 1 ("04:01")
+        mockMvc.perform(put("/albums/1/songs/2")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.title", is("04:01")))
+                .andExpect(jsonPath("$.releaseDate", is("2024-03-15T13:55:21.850Z")))
+                .andExpect(jsonPath("$.songsIds[*]", containsInAnyOrder(1, 2)));
 //        16. when I go to /albums/1 then I can see album with 2 songs (id1 and id2)
 
 

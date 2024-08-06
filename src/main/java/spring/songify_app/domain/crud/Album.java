@@ -50,4 +50,10 @@ class Album extends BaseEntity {
         artists.remove(artist);
         artist.removeAlbum(this);
     }
+
+    public Set<Long> getSongsIds() {
+        return this.songs.stream()
+                .map(Song::getId)
+                .collect(Collectors.toSet());
+    }
 }
