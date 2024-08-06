@@ -33,7 +33,7 @@ class AlbumController {
     @PostMapping
     ResponseEntity<AlbumWithSongsResponseDto> addAlbumWithSongs(@RequestBody AlbumWithSongsRequestDto albumRequestDto) {
         AlbumWithSongsDto albumDto = songifyCrudFacade.addAlbumWithSong(albumRequestDto);
-        return ResponseEntity.ok(new AlbumWithSongsResponseDto(albumDto.title(), albumDto.releaseDate(), albumDto.songsIds()));
+        return ResponseEntity.ok(new AlbumWithSongsResponseDto(albumDto.id(), albumDto.title(), albumDto.releaseDate(), albumDto.songsIds()));
     }
 
     @PutMapping("/{id}/name")

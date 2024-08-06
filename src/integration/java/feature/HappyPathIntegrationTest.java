@@ -130,6 +130,20 @@ class HappyPathIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.albums", empty()));
 //        10. when I post to /albums with Album "04:01" and Song with id 1 then Album "04:01" is returned with id 1
+        mockMvc.perform(post("/albums")
+                        .content("""
+                            {
+                              "title": "04:01",
+                              "releaseDate": "2024-03-15T13:55:21.850Z",
+                              "songsIds": [1]
+                            }
+                            """.trim())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.title", is("04:01")))
+                .andExpect(jsonPath("$.releaseDate", is("2024-03-15T13:55:21.850Z")))
+                .andExpect(jsonPath("$.songsIds[*]", containsInAnyOrder(1)));
 //        11. when I go to /albums/1 then I can not see any albums because there is no artist in system
 //        12. when I post to /artists with Artist "Kękę" then Artist "Kękę" is returned with id 1
 //        13. when I put to /artists/1/albums/2 then Artist with id 1 ("Kękę") is added to Album with id 1 ("04:01")
