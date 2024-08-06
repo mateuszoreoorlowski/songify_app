@@ -1,7 +1,5 @@
 package spring.songify_app.domain.crud.dto;
 
-import lombok.Builder;
-
 import java.time.Instant;
 import java.util.Set;
 

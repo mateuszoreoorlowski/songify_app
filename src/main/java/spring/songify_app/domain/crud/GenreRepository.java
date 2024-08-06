@@ -1,10 +1,8 @@
 package spring.songify_app.domain.crud;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-import spring.songify_app.domain.crud.dto.GenreDto;
 
 import java.util.Optional;
 import java.util.Set;

@@ -1,9 +1,7 @@
 package spring.songify_app.domain.crud.dto;
 
-
 import java.time.Instant;
 import java.util.Set;
-
 
 public interface AlbumInfo {
     Long getId();

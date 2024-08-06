@@ -17,7 +17,6 @@ class AlbumDeleter {
     }
 
     void deleteAlbumById(Long albumId) {
-        // Sprawdź, czy istnieją piosenki powiązane z tym albumem
         if (songRepository.existsByAlbumId(albumId)) {
             throw new IllegalArgumentException("Nie można usunąć albumu, istnieją piosenki powiązane z nim.");
         }

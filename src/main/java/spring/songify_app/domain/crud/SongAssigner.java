@@ -48,13 +48,13 @@ class SongAssigner {
         // Przypisanie piosenki do albumu, jeśli nie jest już przypisana
         if (song.getAlbum() == null || !song.getAlbum().getId().equals(album.getId())) {
             song.setAlbum(album);
-            songRepository.save(song);  // Save changes to song
+            songRepository.save(song);
         }
 
         // Przypisanie artysty do albumu, jeśli nie jest już przypisany
         if (!album.getArtists().contains(artist)) {
             album.addArtist(artist);
-            albumRepository.save(album);  // Save changes to album
+            albumRepository.save(album);
         }
 
         // Aktualizacja relacji pomiędzy albumem i artystą

@@ -2,19 +2,16 @@ package spring.songify_app.domain.crud;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Pageable;
 import spring.songify_app.domain.crud.dto.*;
 import spring.songify_app.domain.crud.exceptions.AlbumNotFoundException;
 import spring.songify_app.domain.crud.exceptions.GenreWasNotDeletedException;
 import spring.songify_app.domain.crud.exceptions.SongNotFoundException;
 import spring.songify_app.infrastructure.crud.album.request.AlbumWithSongsRequestDto;
-import spring.songify_app.infrastructure.crud.album.response.AlbumWithSongsResponseDto;
 import spring.songify_app.infrastructure.crud.artist.dto.request.ArtistRequestDto;
 import spring.songify_app.infrastructure.crud.genre.request.GenreRequestDto;
 import spring.songify_app.infrastructure.crud.song.request.CreateSongRequestDto;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;

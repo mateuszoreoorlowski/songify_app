@@ -1,7 +1,6 @@
 package spring.songify_app.domain.crud;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import spring.songify_app.domain.crud.dto.GenreDto;
 import spring.songify_app.domain.crud.dto.GenreWithSongsDto;

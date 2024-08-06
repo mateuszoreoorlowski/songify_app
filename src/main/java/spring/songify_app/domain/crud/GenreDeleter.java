@@ -12,7 +12,6 @@ class GenreDeleter {
     private final SongRepository songRepository;
 
     public void deleteGenre(Long genreId) {
-        // Sprawdź, czy istnieją piosenki powiązane z tym gatunkiem
         if (songRepository.existsByGenreId(genreId)) {
             throw new GenreWasNotDeletedException("genre not deleted, there are songs related to it");
         }

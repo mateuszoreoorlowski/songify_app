@@ -30,18 +30,14 @@ class AlbumAdder {
                 .map(songRetriever::findSongById)
                 .collect(Collectors.toSet());
 
-        System.out.println("Znalezione piosenki: " + songs); // Logowanie znalezionych piosenek
-
         Album album = new Album();
         album.setTitle(title);
         album.setReleaseDate(releaseDate);
         album.addSongToAlbum(songs);
 
         Album savedAlbum = albumRepository.save(album);
-        System.out.println("Zapisany album: " + savedAlbum); // Logowanie zapisanego albumu
 
         Set<Long> songsIds = savedAlbum.getSongs().stream().map(Song::getId).collect(Collectors.toSet());
-        System.out.println("ID piosenek w zapisanym albumie: " + songsIds); // Logowanie ID piosenek w albumie
 
         return new AlbumWithSongsDto(savedAlbum.getId(), savedAlbum.getTitle(), savedAlbum.getReleaseDate(), songsIds);
     }

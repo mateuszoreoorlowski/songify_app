@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.songify_app.domain.crud.SongifyCrudFacade;
-import spring.songify_app.domain.crud.dto.ArtistAlbumDto;
 import spring.songify_app.domain.crud.dto.ArtistDto;
 import spring.songify_app.domain.crud.dto.ArtistWithAlbumsDto;
 import spring.songify_app.infrastructure.crud.artist.dto.request.ArtistRequestDto;

@@ -2,15 +2,12 @@ package spring.songify_app.infrastructure.crud.song;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.songify_app.domain.crud.SongifyCrudFacade;
 import spring.songify_app.domain.crud.dto.*;
 import spring.songify_app.infrastructure.crud.song.request.CreateSongRequestDto;
 import spring.songify_app.infrastructure.crud.song.response.AllSongsResponseDto;
-import spring.songify_app.infrastructure.crud.song.response.AssignGenreToSongDto;
 import spring.songify_app.infrastructure.crud.song.response.CreateSongResponseDto;
 import spring.songify_app.infrastructure.crud.song.response.GetSongResponseDto;
 

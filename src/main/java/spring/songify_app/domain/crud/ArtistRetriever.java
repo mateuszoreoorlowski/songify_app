@@ -1,10 +1,8 @@
 package spring.songify_app.domain.crud;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import spring.songify_app.domain.crud.dto.AlbumDto;
-import spring.songify_app.domain.crud.dto.AlbumInfo;
 import spring.songify_app.domain.crud.dto.ArtistDto;
 import spring.songify_app.domain.crud.dto.ArtistWithAlbumsDto;
 import spring.songify_app.domain.crud.exceptions.ArtistNotFoundException;
