@@ -13,9 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import spring.songify_app.domain.usercrud.UserRepository;
+import spring.songify_app.infrastructure.security.jwt.JwtAuthTokenFilter;
 
 import java.util.List;
 
@@ -38,12 +40,13 @@ class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthTokenFilter jwtAuthTokenFilter) throws Exception {
         http.csrf(c -> c.disable()); // CSRF zostaje wyłączone
         http.cors(corsConfigurerCustomizer());
         http.formLogin(c -> c.disable()); // Formularz logowania zostaje wyłączony
         http.httpBasic(c -> c.disable()); // HTTP Basic zostaje wyłączone
         http.sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Sesja zostaje ustawiona na STATELESS - nie przechowuje stanu
+        http.addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class);
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/swagger-ui/**").permitAll() // Swagger UI zostaje udostępnione publicznie
                 .requestMatchers("/swagger-resources/**").permitAll() // Swagger Resources zostaje udostępnione publicznie
