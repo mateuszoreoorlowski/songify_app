@@ -53,7 +53,7 @@ class SecurityConfig {
                 .requestMatchers("/v3/api-docs/**").permitAll() // Swagger API Docs zostaje udostępnione publicznie
                 .requestMatchers("/users/register/**").permitAll() // Rejestracja użytkownika zostaje udostępniona publicznie
                 .requestMatchers(HttpMethod.POST, "/token/**").permitAll() // Generowanie tokena zostaje udostępnione publicznie
-                .requestMatchers(HttpMethod.GET, "/songs/**").permitAll() // Pobieranie piosenek zostaje udostępnione publicznie
+                .requestMatchers(HttpMethod.GET, "/songs/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/artists/**").permitAll() // Pobieranie artystów zostaje udostępnione publicznie
                 .requestMatchers(HttpMethod.GET, "/albums/**").permitAll() // Pobieranie albumów zostaje udostępnione publicznie
                 .requestMatchers(HttpMethod.GET, "/genres/**").permitAll() // Pobieranie gatunków zostaje udostępnione publicznie
@@ -83,6 +83,7 @@ class SecurityConfig {
                 config.setAllowedMethods(
                         List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
                 config.setAllowedHeaders(List.of("*"));
+                config.setAllowCredentials(true);
                 return config;
             };
             c.configurationSource(source);
