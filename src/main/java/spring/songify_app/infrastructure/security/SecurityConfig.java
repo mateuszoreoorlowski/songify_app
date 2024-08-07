@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import spring.songify_app.domain.usercrud.UserRepository;
-import spring.songify_app.infrastructure.security.jwt.JwtAuthTokenFilter;
 
 import java.util.List;
 
@@ -40,20 +39,19 @@ class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthTokenFilter jwtAuthTokenFilter) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(c -> c.disable()); // CSRF zostaje wyłączone
         http.cors(corsConfigurerCustomizer());
         http.formLogin(c -> c.disable()); // Formularz logowania zostaje wyłączony
         http.httpBasic(c -> c.disable()); // HTTP Basic zostaje wyłączone
         http.sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Sesja zostaje ustawiona na STATELESS - nie przechowuje stanu
-        http.addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class);
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/swagger-ui/**").permitAll() // Swagger UI zostaje udostępnione publicznie
                 .requestMatchers("/swagger-resources/**").permitAll() // Swagger Resources zostaje udostępnione publicznie
                 .requestMatchers("/v3/api-docs/**").permitAll() // Swagger API Docs zostaje udostępnione publicznie
                 .requestMatchers("/users/register/**").permitAll() // Rejestracja użytkownika zostaje udostępniona publicznie
                 .requestMatchers(HttpMethod.POST, "/token/**").permitAll() // Generowanie tokena zostaje udostępnione publicznie
-                .requestMatchers(HttpMethod.GET, "/songs/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/songs/**").permitAll() // Pobieranie piosenek zostaje udostępnione publicznie
                 .requestMatchers(HttpMethod.GET, "/artists/**").permitAll() // Pobieranie artystów zostaje udostępnione publicznie
                 .requestMatchers(HttpMethod.GET, "/albums/**").permitAll() // Pobieranie albumów zostaje udostępnione publicznie
                 .requestMatchers(HttpMethod.GET, "/genres/**").permitAll() // Pobieranie gatunków zostaje udostępnione publicznie
@@ -79,7 +77,7 @@ class SecurityConfig {
             CorsConfigurationSource source = request -> {
                 CorsConfiguration config = new CorsConfiguration();
                 config.setAllowedOrigins(
-                        List.of("http://localhost:3000"));
+                        List.of("https://localhost:3000"));
                 config.setAllowedMethods(
                         List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
                 config.setAllowedHeaders(List.of("*"));
