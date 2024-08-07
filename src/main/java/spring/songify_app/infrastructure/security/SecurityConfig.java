@@ -3,7 +3,9 @@ package spring.songify_app.infrastructure.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,6 +33,11 @@ class SecurityConfig {
     }
 
     @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(c -> c.disable()); // CSRF zostaje wyłączone
         http.cors(corsConfigurerCustomizer());
@@ -42,6 +49,7 @@ class SecurityConfig {
                 .requestMatchers("/swagger-resources/**").permitAll() // Swagger Resources zostaje udostępnione publicznie
                 .requestMatchers("/v3/api-docs/**").permitAll() // Swagger API Docs zostaje udostępnione publicznie
                 .requestMatchers("/users/register/**").permitAll() // Rejestracja użytkownika zostaje udostępniona publicznie
+                .requestMatchers(HttpMethod.POST, "/token/**").permitAll() // Generowanie tokena zostaje udostępnione publicznie
                 .requestMatchers(HttpMethod.GET, "/songs/**").permitAll() // Pobieranie piosenek zostaje udostępnione publicznie
                 .requestMatchers(HttpMethod.GET, "/artists/**").permitAll() // Pobieranie artystów zostaje udostępnione publicznie
                 .requestMatchers(HttpMethod.GET, "/albums/**").permitAll() // Pobieranie albumów zostaje udostępnione publicznie
