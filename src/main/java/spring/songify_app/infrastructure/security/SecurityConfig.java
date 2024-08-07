@@ -5,11 +5,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import spring.songify_app.domain.usercrud.UserRepository;
+
+import java.util.List;
 
 @Configuration
 class SecurityConfig {
@@ -27,8 +33,10 @@ class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(c -> c.disable()); // CSRF zostaje wyłączone
-        http.formLogin(Customizer.withDefaults()); // Formularz logowania zostaje włączony
-        http.httpBasic(Customizer.withDefaults()); // HTTP Basic zostaje włączony
+        http.cors(corsConfigurerCustomizer());
+        http.formLogin(c -> c.disable()); // Formularz logowania zostaje wyłączony
+        http.httpBasic(c -> c.disable()); // HTTP Basic zostaje wyłączone
+        http.sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Sesja zostaje ustawiona na STATELESS - nie przechowuje stanu
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/swagger-ui/**").permitAll() // Swagger UI zostaje udostępnione publicznie
                 .requestMatchers("/swagger-resources/**").permitAll() // Swagger Resources zostaje udostępnione publicznie
@@ -53,5 +61,20 @@ class SecurityConfig {
                 .anyRequest().authenticated() // Wymaga autoryzacji dla wszystkich żądań
         );
         return http.build();
+    }
+
+    public Customizer<CorsConfigurer<HttpSecurity>> corsConfigurerCustomizer() {
+        return c -> {
+            CorsConfigurationSource source = request -> {
+                CorsConfiguration config = new CorsConfiguration();
+                config.setAllowedOrigins(
+                        List.of("http://localhost:3000"));
+                config.setAllowedMethods(
+                        List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
+                config.setAllowedHeaders(List.of("*"));
+                return config;
+            };
+            c.configurationSource(source);
+        };
     }
 }
